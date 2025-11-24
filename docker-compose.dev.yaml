@@ -1,0 +1,8 @@
+services:
+  account:
+    build:
+      context: .
+      dockerfile: src/backend_services/account/Dockerfile
+    ports:
+      - "8000:8000"
+    command: uvicorn account:app --host 0.0.0.0 --port 8000
