@@ -1,8 +1,35 @@
 services:
+  db:
+    image: postgres:17 
+    container_name: db
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    networks:
+      - pg-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+        POSTGRES_DB: ${DATABASE_NAME}
+        POSTGRES_USER: ${DATABASE_USERNAME}
+        POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+        POSTGRES_PORT: ${DATABASE_PORT}
+    env_file: .env
+    attach: false
+
   account:
     build:
       context: .
       dockerfile: src/backend_services/account/Dockerfile
     ports:
       - "8000:8000"
+    networks:
+      - pg-network
     command: uvicorn account:app --host 0.0.0.0 --port 8000
+
+
+networks:
+  pg-network:
+
+
+volumes:
+  postgres_data:
