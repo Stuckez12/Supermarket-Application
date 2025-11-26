@@ -14,3 +14,4 @@ COPY ./src/backend_services/account ./account
 COPY ./src/backend_services/utils ./utils
 
 ENV PATH="/api/.venv/bin:$PATH"
+ENV PYTHONPATH="/api:$PYTHONPATH"

@@ -9,22 +9,36 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-        POSTGRES_DB: ${DATABASE_NAME}
         POSTGRES_USER: ${DATABASE_USERNAME}
         POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
         POSTGRES_PORT: ${DATABASE_PORT}
     env_file: .env
     attach: false
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pg-admin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - pg-network
+    attach: false
+
   account:
     build:
       context: .
       dockerfile: src/backend_services/account/Dockerfile
+    container_name: account
     ports:
       - "8000:8000"
     networks:
       - pg-network
-    command: uvicorn account:app --host 0.0.0.0 --port 8000
+    command: uvicorn account.main:app --host 0.0.0.0 --port 8000
 
 
 networks:
@@ -32,4 +46,5 @@ networks:
 
 
 volumes:
+  pgadmin-data:
   postgres_data:

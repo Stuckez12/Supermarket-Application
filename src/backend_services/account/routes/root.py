@@ -5,7 +5,7 @@ from account.schemas import ApplicationHealth
 
 api = APIRouter(
     prefix="",
-    tags=["users", "authentication"],
+    tags=["root"],
     redirect_slashes=False,
 )
 
