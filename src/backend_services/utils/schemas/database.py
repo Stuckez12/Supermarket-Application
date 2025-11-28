@@ -5,8 +5,11 @@ class DatabaseURL(BaseModel):
     username: str
     password: str
     host: str
-    port: str
+    port: int
     db_name: str
+
+    def __str__(self):
+        return f"postgresql+psycopg2://{self.username}:{self.password}@{self.host}:{self.port}/{self.db_name}"
 
 
 class DatabaseSettings(BaseModel):

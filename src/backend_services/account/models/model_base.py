@@ -2,8 +2,10 @@ import uuid
 
 from datetime import datetime, timezone
 from sqlalchemy import Column, DateTime, UUID
+from sqlalchemy.ext.declarative import declarative_base
 
-from utils.database.database import Base
+
+Base = declarative_base()
 
 
 class BaseModel(Base):

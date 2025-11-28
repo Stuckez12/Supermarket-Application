@@ -7,7 +7,10 @@ from utils.schemas import DateTimeConfig, NumberConfig, StringConfig, DataTypeCo
 
 
 class DataVerification:
-    def __init__(self: Self, config: dict[str, DataTypeConfig]):
+    def __init__(self: Self, config: dict[str, DataTypeConfig] | None = None):
+        if config is None:
+            config = {}
+
         self.string = config.get("string", StringConfig())
         self.number = config.get("number", NumberConfig())
         self.datetime = config.get("datetime", DateTimeConfig())

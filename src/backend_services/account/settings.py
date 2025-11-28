@@ -3,12 +3,26 @@ import os
 from pydantic_settings import BaseSettings
 from typing import Type
 
+from utils.schemas import DatabaseURL
+
 
 class DevelopmentSettings(BaseSettings):
     DATABASE_USERNAME: str
     DATABASE_PASSWORD: str
     DATABASE_HOST: str
     DATABASE_PORT: int
+
+    def get_db_url(self):
+        return DatabaseURL(
+            username=self.DATABASE_USERNAME,
+            password=self.DATABASE_PASSWORD,
+            host=self.DATABASE_HOST,
+            port=self.DATABASE_PORT,
+            db_name="NONE",
+        )
+
+    PGADMIN_EMAIL: str
+    PGADMIN_PASSWORD: str
 
     class Config:
         env_file = ".env"
@@ -23,4 +37,4 @@ def get_settings() -> BaseSettings:
     return all_envs[environment]()
 
 
-settings = get_settings()
+settings: DevelopmentSettings = get_settings()

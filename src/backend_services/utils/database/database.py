@@ -1,19 +1,19 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import QueuePool
 
 from utils.schemas import DatabaseSettings, DatabaseURL
 
 
-Base = declarative_base()
+def get_database_url(url: DatabaseURL):
+    return f"postgresql+psycopg2://{url.username}:{url.password}@{url.host}:{url.port}/{url.db_name}"
 
 
 def db_connection(url: DatabaseURL, settings: DatabaseSettings) -> sessionmaker:
     # Create engine
     engine = create_engine(
-        f"postgresql+psycopg2://{url.username}:{url.password}@{url.host}:{url.port}/{url.db_name}",
+        get_database_url(url),
         poolclass=QueuePool,
         pool_pre_ping=settings.pool_pre_ping,
         pool_size=settings.pool_size,
