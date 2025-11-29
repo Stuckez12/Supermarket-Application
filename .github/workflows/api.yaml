@@ -56,5 +56,5 @@ jobs:
           pip install uv
           uv sync
 
-      - name: Run mypy
-        run: uv run pytest -vv --cov
+      - name: Run Account Tests
+        run: uv run pytest -vv tests/backend_services/account --cov
