@@ -1,6 +1,6 @@
 from account.settings import settings
 
-from utils.database.database import DatabaseSettings, DatabaseURL
+from utils.database.database import DatabaseSettings
 
 
 db_settings = DatabaseSettings()

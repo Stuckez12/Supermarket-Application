@@ -1,5 +1,7 @@
 from account.common.enums import InteractionType, OperationTags, OperationType
-from account.schemas import PermissionCreateSchema
+from account.schemas import PermissionCreateSchema, RoleMappingSchema
+
+from utils.enums import AccountRoleEnum
 
 
 ACCOUNT_SERVICE_VERSION = "0.0.1"
@@ -169,18 +171,41 @@ PERMISSIONS = {
     ),
 }
 
-# Grant customers basic access to the application
+
 CUSTOMER_ROLE_PERMISSIONS = [
     OperationType.VIEW_ACCOUNT,
     OperationType.UPDATE_ACCOUNT,
     OperationType.DELETE_ACCOUNT,
 ]
 
-# Grant moderators specific admin commands + all customer permissions
+
 MODERATOR_ROLE_PERMISSIONS = CUSTOMER_ROLE_PERMISSIONS + [
     OperationType.ADMIN_VIEW_ACCOUNT,
     OperationType.ADMIN_MODIFY_ACCOUNT_STATUS,
 ]
 
-# Grant admin role all operation permissions
+
 ADMIN_ROLE_PERMISSIONS = [p for p in OperationType]
+
+
+ROLE_PERMISSION_MAPPING = {
+    AccountRoleEnum.ADMIN.value: ADMIN_ROLE_PERMISSIONS,
+    AccountRoleEnum.MODERATOR.value: MODERATOR_ROLE_PERMISSIONS,
+    AccountRoleEnum.CUSTOMER.value: CUSTOMER_ROLE_PERMISSIONS,
+}
+
+
+ROLES = [
+    RoleMappingSchema(
+        name=AccountRoleEnum.ADMIN,
+        description="Admin users monitor and upkeep the sites' health and operations with full access to the application functionality",
+    ),
+    RoleMappingSchema(
+        name=AccountRoleEnum.MODERATOR,
+        description="Moderator users enforce the sites' rules and regulations on all customer users",
+    ),
+    RoleMappingSchema(
+        name=AccountRoleEnum.CUSTOMER,
+        description="Customer users interact with the site to browse, shop, and manage their personal account",
+    ),
+]

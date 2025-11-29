@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from account.common.constants import ACCOUNT_SERVICE_VERSION
+from account.common.utils.seed_db import seed_db
 from account.routes import app_api
 
 from utils.app_initialise import Initialise
@@ -22,6 +23,8 @@ async def app_lifespan(app: FastAPI):
 
     if os.environ.get("PYTHON_ENV") == "production":
         app_checks.database("api/account/alembic.ini")
+
+    seed_db(db_url_obj, db_settings)
 
     # Starting app
     yield

@@ -27,6 +27,3 @@ class Initialise:
     def database(self: Self, ini_location: str):
         alembic_cfg = Config(ini_location)
         command.upgrade(alembic_cfg, "head")
-
-    def database_data(self: Self):
-        pass

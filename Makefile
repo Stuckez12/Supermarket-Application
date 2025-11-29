@@ -52,3 +52,6 @@ ifndef MESSAGE
 	$(error 'MESSAGE is not set. Usage: make auto_revision_db MESSAGE="message"')
 endif
 	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini revision --autogenerate -m "$(MESSAGE)"
+
+seed_db:
+	@docker-compose -f docker-compose.dev.yaml exec account python account/app_management.py seed-db

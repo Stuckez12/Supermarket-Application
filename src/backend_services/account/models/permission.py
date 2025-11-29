@@ -4,12 +4,16 @@ from sqlalchemy import Boolean, Column, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Self, cast, TYPE_CHECKING
 
-from account.models.association import permission_tags, role_permissions
+from account.models.association import (
+    account_removed_permissions,
+    permission_tags,
+    role_permissions,
+)
 from account.models.model_base import BaseModel
 from account.common.enums import InteractionType
 
 if TYPE_CHECKING:
-    from account.models import PermissionTagsModel, RoleModel
+    from account.models import AccountModel, PermissionTagsModel, RoleModel
 
 
 class PermissionModel(BaseModel):
@@ -21,10 +25,12 @@ class PermissionModel(BaseModel):
     category: Mapped[str] = mapped_column(String(32), nullable=False)
     removable: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-    tags: Mapped[list["PermissionTagsModel"]] = relationship(
+    accounts: Mapped[list["AccountModel"]] = relationship(
+        secondary=account_removed_permissions, back_populates="removed_permissions"
+    )
+    perm_tags: Mapped[list["PermissionTagsModel"]] = relationship(
         secondary=permission_tags, back_populates="permissions"
     )
-
     roles: Mapped[list["RoleModel"]] = relationship(
         secondary=role_permissions, back_populates="permissions"
     )

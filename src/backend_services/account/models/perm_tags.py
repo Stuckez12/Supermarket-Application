@@ -14,7 +14,7 @@ class PermissionTagsModel(BaseModel):
 
     name: Mapped[str] = mapped_column(String(64), nullable=False)
 
-    tags: Mapped[list["PermissionModel"]] = relationship(
+    permissions: Mapped[list["PermissionModel"]] = relationship(
         secondary=permission_tags, back_populates="perm_tags"
     )
 

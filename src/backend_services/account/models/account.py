@@ -1,7 +1,17 @@
 import uuid
 
 from datetime import datetime, timezone
-from sqlalchemy import Boolean, Column, Date, DateTime, Enum, Integer, String, UUID
+from sqlalchemy import (
+    Boolean,
+    Column,
+    Date,
+    DateTime,
+    Enum,
+    ForeignKey,
+    Integer,
+    String,
+    UUID,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Self, cast, TYPE_CHECKING
 
@@ -20,7 +30,6 @@ class AccountModel(BaseModel):
     __tablename__ = "accounts"
 
     email: Mapped[str] = mapped_column(EmailType, nullable=False, unique=True)
-
     password: Mapped[str] = mapped_column(PasswordType, nullable=False, unique=True)
     password_last_changed_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.now(timezone.utc), nullable=False
@@ -33,25 +42,22 @@ class AccountModel(BaseModel):
     )
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     master_user: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-
     first_name: Mapped[str] = mapped_column(String(64), nullable=False)
     last_name: Mapped[str] = mapped_column(String(64), nullable=False)
     date_of_birth: Mapped[datetime] = mapped_column(Date, nullable=False)
     gender: Mapped[GenderEnum] = mapped_column(GenderType, nullable=False)
-
     email_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     user_status: Mapped[AccountStatusEnum] = mapped_column(
         Enum(AccountStatusEnum), default=AccountStatusEnum.UNVERIFIED, nullable=False
     )
-
     role_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), nullable=False, unique=True
+        UUID(as_uuid=True), ForeignKey("roles.id")
     )
 
-    roles: Mapped[list["RoleModel"]] = relationship(back_populates="accounts")
     removed_permissions: Mapped[list["PermissionModel"]] = relationship(
         secondary=account_removed_permissions, back_populates="accounts"
     )
+    roles: Mapped[list["RoleModel"]] = relationship(back_populates="accounts")
 
     def __init__(
         self: Self,
