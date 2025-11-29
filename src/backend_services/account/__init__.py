@@ -1,20 +1,33 @@
+import logging
+import os
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from account.common import ACCOUNT_SERVICE_VERSION
+from account.common.constants import ACCOUNT_SERVICE_VERSION
 from account.routes import app_api
+
+from utils.app_initialise import Initialise
+from utils.app_services.account import db_settings, db_url_obj
+
+
+logger = logging.getLogger("uvicorn")
 
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
     # Initialise app
-    print("application startup")
+    app_checks = Initialise(db_url_obj, db_settings)
+    app_checks.check_database_connection()
+
+    if os.environ.get("PYTHON_ENV") == "production":
+        app_checks.database("api/account/alembic.ini")
 
     # Starting app
     yield
 
     # Closing app
-    print("application shutdown")
+    # logger.info("application shutdown there")
 
 
 def create_app() -> FastAPI:

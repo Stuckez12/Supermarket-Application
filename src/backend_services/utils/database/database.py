@@ -1,7 +1,8 @@
 from contextlib import contextmanager
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
+from typing import Generator
 
 from utils.schemas import DatabaseSettings, DatabaseURL
 
@@ -27,7 +28,7 @@ def db_connection(url: DatabaseURL, settings: DatabaseSettings) -> sessionmaker:
 
 
 @contextmanager
-def get_db(session_factory: sessionmaker):
+def get_db(session_factory: sessionmaker) -> Generator[Session, None, None]:
     db = session_factory()
 
     try:

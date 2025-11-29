@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
-from typing import Type
+from typing import Type, Union
 
 from utils.enums import TriBool
 
@@ -25,4 +25,4 @@ class DateTimeConfig(BaseModel):
     max_datetime: datetime = Field(default_factory=datetime.now)
 
 
-DataTypeConfig = DateTimeConfig | NumberConfig | StringConfig
+DataTypeConfig = Union[DateTimeConfig, NumberConfig, StringConfig]

@@ -42,16 +42,13 @@ full-restart:
 upgrade_db:
 	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini upgrade head
 
+VERSION ?= -1
 downgrade_db:
-ifndef VERSION
-	VERSION=-1
-	@echo "VERSION not defined. Defaulting to downgrade to previous version"
-endif
+	@echo "Downgrading to/by $(VERSION) version"
 	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini downgrade $(VERSION)
 
 auto_revision_db:
 ifndef MESSAGE
 	$(error 'MESSAGE is not set. Usage: make auto_revision_db MESSAGE="message"')
 endif
-	@echo "Running with PARAM=$(PARAM)"
-	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini revision --autogenerate -m "$(PARAM)"
+	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini revision --autogenerate -m "$(MESSAGE)"

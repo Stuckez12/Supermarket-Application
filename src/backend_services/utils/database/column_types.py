@@ -4,21 +4,21 @@ import re
 from argon2 import PasswordHasher
 from email_validator import EmailNotValidError, validate_email
 from sqlalchemy.types import Enum, String, TypeDecorator
-from typing import Self
+from typing import Any, Self
 
 from utils.constants import EMAIL_CONFIG, PASSWORD_CONFIG
 from utils.data_verification import DataVerification
-from utils.database import GenderEnum
+from utils.enums import GenderEnum
 from utils.exceptions import UnableToFetchDataDBException
 
 
 class EmailType(TypeDecorator):
     impl = String(96)
 
-    def process_bind_param(self: Self, email: str, _):
+    def process_bind_param(self: Self, email: Any, _):
         v = DataVerification(config={"string": EMAIL_CONFIG})
 
-        v.verify_string(email)
+        v.verify_string(email, "Email")
 
         pattern = r"^(?!\.)(?!.*\.\.)[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$"
 
@@ -39,28 +39,28 @@ class EmailType(TypeDecorator):
 
         return validated_email
 
-    def process_result_value(self: Self, email: str, _):
+    def process_result_value(self: Self, email: Any, _):
         return email
 
 
 class PasswordType(TypeDecorator):
     impl = String(64)
 
-    def process_bind_param(self: Self, password: str, _):
+    def process_bind_param(self: Self, password: Any, _):
         v = DataVerification(config={"string": PASSWORD_CONFIG})
 
-        v.verify_string(password)
+        v.verify_string(password, "Password")
 
         return PasswordHasher().hash(password)
 
-    def process_result_value(self: Self, password: str, _):
+    def process_result_value(self: Self, password: Any, _):
         return password
 
 
 class GenderType(TypeDecorator):
     impl = Enum(GenderEnum)
 
-    def process_bind_param(self: Self, gender: GenderEnum, _):
+    def process_bind_param(self: Self, gender: Any, _):
         if type(gender) != GenderEnum:
             logging.error(
                 "Gender value must be of type GenderEnum when passing to database"
@@ -70,7 +70,7 @@ class GenderType(TypeDecorator):
 
         return gender
 
-    def process_result_value(self: Self, gender: str, _):
+    def process_result_value(self: Self, gender: Any, _):
         try:
             return GenderEnum(gender)
 

@@ -1,1 +1,0 @@
-from account.common.constants import ACCOUNT_SERVICE_VERSION
