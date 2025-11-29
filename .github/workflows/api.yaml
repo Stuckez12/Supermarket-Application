@@ -57,4 +57,4 @@ jobs:
           uv sync
 
       - name: Run Account Tests
-        run: uv run pytest -vv tests/backend_services/account --cov
+        run: uv run pytest -vv tests/backend_services/account
