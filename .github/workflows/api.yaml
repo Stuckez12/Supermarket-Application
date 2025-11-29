@@ -1,0 +1,60 @@
+name: Backend API CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Sync Packages
+        run: |
+          pip install uv
+          uv sync
+
+      - name: Run mypy
+        run: uv run mypy .
+
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres-testing:
+        image: postgres:16
+        env:
+          POSTGRES_USER: testing
+          POSTGRES_PASSWORD: testing
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U myuser"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Sync Packages
+        run: |
+          pip install uv
+          uv sync
+
+      - name: Run mypy
+        run: uv run pytest -vv --cov

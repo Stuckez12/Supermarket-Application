@@ -44,11 +44,8 @@ class TestSettings(BaseSettings):
             db_name="NONE",
         )
 
-    PGADMIN_EMAIL: str
-    PGADMIN_PASSWORD: str
-
     class Config:
-        env_file = ".env"
+        env_file = ".env.testing"
         env_file_encoding = "utf-8"
 
 
