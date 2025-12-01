@@ -17,5 +17,9 @@ COPY .env .
 COPY ./src/backend_services/account ./account
 COPY ./src/backend_services/utils ./utils
 
+# Copy certificates and service private key
+COPY ./src/certificates/certificate ./certificates/certificate
+COPY ./src/certificates/private_key/account.pem ./certificates/private_key/account.pem
+
 ENV PATH="/api/.venv/bin:$PATH"
 ENV PYTHONPATH="/api:$PYTHONPATH"

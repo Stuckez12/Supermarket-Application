@@ -40,7 +40,7 @@ services:
       - pg-network
     volumes:
       - ./src/backend_services/account:/api/account
-    command: uvicorn account.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /api/account --log-level info
+    command: python -m account.server
 
 
 networks:
