@@ -3,6 +3,8 @@ import logging
 
 from concurrent import futures
 
+from account.proto import auth_pb2_grpc
+from account.routes import AccountAuthService
 from account.settings import settings
 
 logging.basicConfig(
@@ -13,12 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def add_services(server: grpc.Server) -> None:
-    # user_login_pb2_grpc.add_UserAuthServiceServicer_to_server(
-    #     UserAuthentication_Service(), server
-    # )
-    # print("Service Added: User-Authentication")
-
-    pass
+    auth_pb2_grpc.add_AccountAuthServiceServicer_to_server(AccountAuthService(), server)
+    print("Service Added: User-Authentication")
 
 
 def start_server() -> None:

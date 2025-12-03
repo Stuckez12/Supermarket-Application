@@ -35,7 +35,7 @@ services:
       dockerfile: src/backend_services/account/Dockerfile
     container_name: account
     ports:
-      - "8000:8000"
+      - ${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}
     networks:
       - pg-network
     volumes:

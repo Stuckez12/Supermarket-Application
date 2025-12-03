@@ -1,0 +1,11 @@
+syntax = "proto3";
+package account_enums;
+
+enum AccountStatusEnum {
+    UNVERIFIED = 0;
+    INACTIVE = 1;
+    ACTIVE = 2;
+    LOCKED = 3;
+    CLOSED = 4;
+    TERMINATED = 5;
+}
