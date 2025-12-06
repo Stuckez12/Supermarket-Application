@@ -12,7 +12,6 @@ def get_database_url(url: DatabaseURL):
 
 
 def db_connection(url: DatabaseURL, settings: DatabaseSettings) -> sessionmaker:
-    # Create engine
     engine = create_engine(
         get_database_url(url),
         poolclass=QueuePool,
@@ -23,12 +22,11 @@ def db_connection(url: DatabaseURL, settings: DatabaseSettings) -> sessionmaker:
         pool_recycle=settings.pool_recycle,
     )
 
-    # Return session factory
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db(session_factory: sessionmaker) -> Generator[Session, None, None]:
-    db = session_factory()
+    db: Generator[Session, None, None] = session_factory()
 
     try:
         yield db

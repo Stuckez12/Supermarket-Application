@@ -19,7 +19,7 @@ from utils.constants import (
 )
 from utils.data_verification import DataVerification
 from utils.enums import AccountRoleEnum, AccountStatusEnum
-from utils.mapping import PythonGRPCMapping
+from utils.mapping import EnumMapping
 from utils.schemas.data_verification import DateTimeConfig
 
 
@@ -46,10 +46,8 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
         v.verify_string(request.last_name, "Last name", LAST_NAME_CONFIG)
         v.verify_datetime(date_of_birth, "Date of birth", date_config)
 
-        gender_mapper = PythonGRPCMapping.mapped(GENDER_ENUM_MAPPING, context=context)
-        status_mapper = PythonGRPCMapping.mapped(
-            ACCOUNT_STATUS_MAPPING, context=context
-        )
+        gender_mapper = EnumMapping.mapped(GENDER_ENUM_MAPPING, context=context)
+        status_mapper = EnumMapping.mapped(ACCOUNT_STATUS_MAPPING, context=context)
 
         db_gen = get_db_gen()
         db = next(db_gen)
@@ -115,9 +113,7 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
         v.verify_string(request.email, "Email", EMAIL_CONFIG)
         v.verify_string(request.password, "Password", PASSWORD_CONFIG)
 
-        status_mapper = PythonGRPCMapping.mapped(
-            ACCOUNT_STATUS_MAPPING, context=context
-        )
+        status_mapper = EnumMapping.mapped(ACCOUNT_STATUS_MAPPING, context=context)
 
         db_gen = get_db_gen()
         db = next(db_gen)

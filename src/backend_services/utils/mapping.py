@@ -5,7 +5,7 @@ from grpc import ServicerContext, StatusCode
 from typing import Any, Self
 
 
-class PythonGRPCMapping:
+class EnumMapping:
     def __init__(
         self: Self, mappings: dict, context: ServicerContext | None = None
     ) -> None:
@@ -26,16 +26,8 @@ class PythonGRPCMapping:
 
     # TODO: Complete this func
     @classmethod
-    def named(
-        cls: Self, python_enum: Enum, grpc_enum, context: ServicerContext | None = None
-    ):
-        assert len(python_enum) == len(
-            grpc_enum
-        ), "Both python and grpc enums must be the same length"
-
-        for name in python_enum:
-            logging.info(name)
-            logging.info(type(name))
+    def named(cls: Self, enum_1: Enum, enum_2, context: ServicerContext | None = None):
+        assert len(enum_1) == len(enum_2), "Both enums must be the same length"
 
         mapping = {}
 
@@ -43,11 +35,6 @@ class PythonGRPCMapping:
 
     def get_alternate_enum(self, enum: Any):
         try:
-            logging.info(enum)
-            logging.info(enum)
-            logging.info(enum)
-            logging.info(enum)
-            logging.info(enum)
             return self.mapping.get(enum)
 
         except:
