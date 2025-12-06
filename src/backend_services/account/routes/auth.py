@@ -1,5 +1,6 @@
 import logging
 
+from argon2 import PasswordHasher
 from datetime import datetime, timedelta
 from grpc import ServicerContext, StatusCode
 from sqlalchemy.exc import NoResultFound
@@ -110,12 +111,43 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
     ) -> auth_pb2.AccountResponse:
         logging.info("AccountAuthService: AccountLogin")
 
-        return auth_pb2.AccountResponse(
-            id="ID",
-            role_id="Role ID",
-            first_name="Name",
-            last_name="Surname",
-            verified=True,
-            master_user=True,
-            user_status=AccountStatusEnum.ACTIVE,
+        v = DataVerification(grpc_context=context)
+
+        v.verify_string(request.email, "Email", EMAIL_CONFIG)
+        v.verify_string(request.password, "Password", PASSWORD_CONFIG)
+
+        status_mapper = PythonGRPCMapping.mapped(
+            ACCOUNT_STATUS_MAPPING, context=context
         )
+
+        with get_db_gen() as db:
+            try:
+                account = (
+                    db.query(AccountModel)
+                    .filter(AccountModel.email == request.email)
+                    .one()
+                )
+
+                if not PasswordHasher().verify(account.password, request.password):
+                    raise LookupError
+
+                return auth_pb2.AccountResponse(
+                    id=str(account.id),
+                    role_id=str(account.role_id),
+                    first_name=account.first_name,
+                    last_name=account.last_name,
+                    verified=account.email_verified,
+                    master_user=account.master_user,
+                    user_status=status_mapper.get_alternate_enum(account.user_status),
+                )
+
+            except (NoResultFound, LookupError):
+                logging.error("Unable to find account")
+                logging.error("Cancelled account login")
+
+                context.abort(StatusCode.NOT_FOUND, "Email or password incorrect")
+
+            except Exception as e:
+                logging.exception(e)
+
+                context.abort(StatusCode.UNKNOWN, "Unable to log into account")

@@ -26,6 +26,8 @@ class DataVerification:
         if self.grpc_context is not None:
             self.grpc_context.abort(error_type, error)
 
+            return None
+
         raise ValueError(error)
 
     def verify_string(

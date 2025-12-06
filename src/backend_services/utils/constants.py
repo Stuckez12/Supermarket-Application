@@ -15,7 +15,7 @@ EMAIL_CONFIG = StringConfig(
 
 PASSWORD_CONFIG = StringConfig(
     min_len=8,
-    max_len=64,
+    max_len=256,
     include_lowercase=TriBool.TRUE,
     include_uppercase=TriBool.TRUE,
     include_number=TriBool.TRUE,
