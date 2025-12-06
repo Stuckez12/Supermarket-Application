@@ -55,3 +55,13 @@ endif
 
 seed_db:
 	@docker-compose -f docker-compose.dev.yaml exec account python account/app_management.py seed-db
+
+
+###################################################################
+# Testing
+###################################################################
+
+unit_tests:
+	set PYTHONDONTWRITEBYTECODE=1 && \
+	cd src/backend_services && \
+	uv run pytest -v tests/unit

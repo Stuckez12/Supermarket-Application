@@ -103,17 +103,17 @@ class DataVerification:
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
         if not isinstance(param, number_conf.number_type):
-            err = f"{param_name} is not of type {number_conf.number_type}"
+            err = f"{param_name} is not of type {number_conf.number_type.__name__}"
 
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
         if param < number_conf.min_val:
-            err = f"{param_name} must be larger than {number_conf.min_val - 1}"
+            err = f"{param_name} must be equal or larger than {number_conf.min_val}"
 
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
         if param > number_conf.max_val:
-            err = f"{param_name} must be smaller than {number_conf.max_val + 1}"
+            err = f"{param_name} must be equal or smaller than {number_conf.max_val}"
 
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
@@ -136,7 +136,7 @@ class DataVerification:
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
         if param < datetime_conf.min_datetime:
-            err = f"{param_name} must be larger than {datetime_conf.min_datetime}"
+            err = f"{param_name} must be larger than {datetime_conf.min_datetime}: {param}"
 
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 

@@ -16,8 +16,8 @@ class StringConfig(BaseModel):
 
 class NumberConfig(BaseModel):
     number_type: Type[int | float] = int
-    min_val: int = 0
-    max_val: int = 100
+    min_val: int | float = 0
+    max_val: int | float = 100
 
 
 class DateTimeConfig(BaseModel):

@@ -5,7 +5,24 @@ on:
   pull_request:
 
 jobs:
-  linter:
+  black-format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Run Black (check only)
+        run: black --check .
+
+  mypy-linting-check:
+    needs: black-format-check
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +40,10 @@ jobs:
           uv sync
 
       - name: Run mypy
-        run: uv run mypy .
+        run: uv run mypy ./src/backend_services --exclude '(?i)test[s]?/'
 
   tests:
+    needs: mypy-linting-check
     runs-on: ubuntu-latest
 
     services:
@@ -56,5 +74,7 @@ jobs:
           pip install uv
           uv sync
 
-      - name: Run Account Tests
-        run: uv run pytest -vv tests/backend_services/account
+      - name: Run Unit Tests
+        run: |
+          cd src/backend_services
+          uv run pytest -v tests/unit --cov=src/backend_services
