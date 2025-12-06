@@ -8,7 +8,8 @@ from typing import Self
 
 from account.proto import auth_pb2, auth_pb2_grpc
 from account.common.utils import get_db_gen, ACCOUNT_STATUS_MAPPING, GENDER_ENUM_MAPPING
-from account.models import AccountModel, RoleModel
+from account.models import AccountModel
+from account.services import AuthService, RoleService
 
 from utils.constants import (
     EMAIL_CONFIG,
@@ -44,67 +45,65 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
         v.verify_string(request.first_name, "First name", FIRST_NAME_CONFIG)
         v.verify_string(request.last_name, "Last name", LAST_NAME_CONFIG)
         v.verify_datetime(date_of_birth, "Date of birth", date_config)
-        gender = v.convert_enums(request.gender, "Gender", GENDER_ENUM_MAPPING)
 
+        gender_mapper = PythonGRPCMapping.mapped(GENDER_ENUM_MAPPING, context=context)
         status_mapper = PythonGRPCMapping.mapped(
             ACCOUNT_STATUS_MAPPING, context=context
         )
 
-        with get_db_gen() as db:
-            try:
-                email_used = (
-                    db.query(AccountModel)
-                    .filter(AccountModel.email == request.email)
-                    .one_or_none()
-                )
+        db_gen = get_db_gen()
+        db = next(db_gen)
 
-                if email_used:
-                    context.abort(StatusCode.ALREADY_EXISTS, "Email already in use")
+        auth_service = AuthService(db)
+        role_service = RoleService(db)
 
-                role_id = (
-                    db.query(RoleModel.id)
-                    .filter(RoleModel.name == AccountRoleEnum.CUSTOMER.value)
-                    .one()
-                )[0]
+        try:
+            if auth_service.is_email_used(request.email):
+                context.abort(StatusCode.ALREADY_EXISTS, "Email already in use")
 
-                new_account = AccountModel(
-                    email=request.email,
-                    password=request.password,
-                    first_name=request.first_name,
-                    last_name=request.last_name,
-                    date_of_birth=date_of_birth,
-                    gender=gender,
-                    email_verified=False,
-                    user_status=AccountStatusEnum.UNVERIFIED,
-                    role_id=role_id,
-                )
+            role = role_service.get_by_name(AccountRoleEnum.CUSTOMER.value)
 
-                db.add(new_account)
-                db.commit()
-                db.refresh(new_account)
+            if role is None:
+                raise NoResultFound
 
-                return auth_pb2.AccountResponse(
-                    id=str(new_account.id),
-                    role_id=str(new_account.role_id),
-                    first_name=new_account.first_name,
-                    last_name=new_account.last_name,
-                    verified=new_account.email_verified,
-                    master_user=new_account.master_user,
-                    user_status=status_mapper.get_alternate_enum(
-                        new_account.user_status
-                    ),
-                )
+            new_account = AccountModel(
+                email=request.email,
+                password=request.password,
+                first_name=request.first_name,
+                last_name=request.last_name,
+                date_of_birth=date_of_birth,
+                gender=gender_mapper.get_alternate_enum(request.gender),
+                email_verified=False,
+                user_status=AccountStatusEnum.UNVERIFIED,
+                role_id=role.id,
+            )
 
-            except NoResultFound:
-                logging.error("Unable to find customer role")
-                logging.error("Cancelled account registration")
+            auth_service.add(new_account)
+            db.commit()
 
-                context.abort(StatusCode.DATA_LOSS, "Unable to register account")
+            return auth_pb2.AccountResponse(
+                id=str(new_account.id),
+                role_id=str(new_account.role_id),
+                first_name=new_account.first_name,
+                last_name=new_account.last_name,
+                verified=new_account.email_verified,
+                master_user=new_account.master_user,
+                user_status=status_mapper.get_alternate_enum(new_account.user_status),
+            )
 
-            except Exception as e:
-                logging.exception(e)
+        except NoResultFound:
+            logging.error("Unable to find customer role")
+            logging.error("Cancelled account registration")
 
-                context.abort(StatusCode.UNKNOWN, "Unable to register account")
+            context.abort(StatusCode.DATA_LOSS, "Unable to register account")
+
+        except Exception as e:
+            logging.exception(e)
+
+            context.abort(StatusCode.UNKNOWN, "Unable to register account")
+
+        finally:
+            db_gen.close()
 
     def AccountLogin(
         self: Self, request: auth_pb2.AccountLoginRequest, context: ServicerContext
@@ -120,34 +119,37 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
             ACCOUNT_STATUS_MAPPING, context=context
         )
 
-        with get_db_gen() as db:
-            try:
-                account = (
-                    db.query(AccountModel)
-                    .filter(AccountModel.email == request.email)
-                    .one()
-                )
+        db_gen = get_db_gen()
+        db = next(db_gen)
 
-                if not PasswordHasher().verify(account.password, request.password):
-                    raise LookupError
+        try:
+            account = (
+                db.query(AccountModel).filter(AccountModel.email == request.email).one()
+            )
 
-                return auth_pb2.AccountResponse(
-                    id=str(account.id),
-                    role_id=str(account.role_id),
-                    first_name=account.first_name,
-                    last_name=account.last_name,
-                    verified=account.email_verified,
-                    master_user=account.master_user,
-                    user_status=status_mapper.get_alternate_enum(account.user_status),
-                )
+            if not PasswordHasher().verify(account.password, request.password):
+                raise LookupError
 
-            except (NoResultFound, LookupError):
-                logging.error("Unable to find account")
-                logging.error("Cancelled account login")
+            return auth_pb2.AccountResponse(
+                id=str(account.id),
+                role_id=str(account.role_id),
+                first_name=account.first_name,
+                last_name=account.last_name,
+                verified=account.email_verified,
+                master_user=account.master_user,
+                user_status=status_mapper.get_alternate_enum(account.user_status),
+            )
 
-                context.abort(StatusCode.NOT_FOUND, "Email or password incorrect")
+        except (NoResultFound, LookupError):
+            logging.error("Unable to find account")
+            logging.error("Cancelled account login")
 
-            except Exception as e:
-                logging.exception(e)
+            context.abort(StatusCode.NOT_FOUND, "Email or password incorrect")
 
-                context.abort(StatusCode.UNKNOWN, "Unable to log into account")
+        except Exception as e:
+            logging.exception(e)
+
+            context.abort(StatusCode.UNKNOWN, "Unable to log into account")
+
+        finally:
+            db_gen.close()

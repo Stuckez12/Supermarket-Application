@@ -1,16 +1,16 @@
 import uuid
 
 from datetime import datetime, timezone
-from sqlalchemy import Column, DateTime, UUID
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Mapped, mapped_column
-from typing import Self, cast
+from sqlalchemy import DateTime, UUID
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from typing import Self
 
 
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 
-class BaseModel(Base):  # type: ignore
+class BaseModel(Base):
     __abstract__ = True
 
     id: Mapped[uuid.UUID] = mapped_column(

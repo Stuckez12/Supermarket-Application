@@ -27,7 +27,6 @@ def db_connection(url: DatabaseURL, settings: DatabaseSettings) -> sessionmaker:
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-@contextmanager
 def get_db(session_factory: sessionmaker) -> Generator[Session, None, None]:
     db = session_factory()
 

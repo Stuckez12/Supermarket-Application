@@ -144,12 +144,3 @@ class DataVerification:
             err = f"{param_name} must be smaller than {datetime_conf.max_datetime}"
 
             self._raise_error(err, StatusCode.INVALID_ARGUMENT)
-
-    def convert_enums(self: Self, param: Any, param_name: str, mapping: dict):
-        try:
-            return mapping.get(param)
-
-        except:
-            err = f"{param_name} must be a valid enum. {param} is invalid"
-
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
