@@ -1,9 +1,9 @@
 """
 Initialise database
 
-Revision ID: a15d5e0da4e3
+Revision ID: 42076e44443e
 Revises:
-Create Date: 2025-11-29 21:05:09.352317
+Create Date: 2025-12-05 23:25:15.525615
 """
 
 from alembic import op
@@ -14,7 +14,7 @@ from utils.database.column_types import EmailType, GenderType, PasswordType
 
 
 # revision identifiers, used by Alembic.
-revision: str = "a15d5e0da4e3"
+revision: str = "42076e44443e"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -61,10 +61,10 @@ def upgrade() -> None:
     op.create_table(
         "accounts",
         sa.Column("email", EmailType(length=96), nullable=False),
-        sa.Column("password", PasswordType(length=64), nullable=False),
+        sa.Column("password", PasswordType(), nullable=False),
         sa.Column("password_last_changed_at", sa.DateTime(), nullable=False),
         sa.Column("failed_login_attempts", sa.Integer(), nullable=False),
-        sa.Column("account_locked_until", sa.Integer(), nullable=True),
+        sa.Column("account_locked_until", sa.DateTime(), nullable=True),
         sa.Column("last_login", sa.DateTime(), nullable=True),
         sa.Column("master_user", sa.Boolean(), nullable=False),
         sa.Column("first_name", sa.String(length=64), nullable=False),
@@ -157,3 +157,7 @@ def downgrade() -> None:
     op.drop_table("permissions")
     op.drop_table("perm_tags")
     # ### end Alembic commands ###
+
+    op.execute("DROP TYPE IF EXISTS interactiontype;")
+    op.execute("DROP TYPE IF EXISTS accountstatusenum;")
+    op.execute("DROP TYPE IF EXISTS genderenum;")

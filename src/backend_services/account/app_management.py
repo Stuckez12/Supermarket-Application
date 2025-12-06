@@ -12,5 +12,10 @@ def seed_db():
     insert_db_data(db_url_obj, db_settings)
 
 
+@app.command()
+def dummy_data():
+    print("Dummy Data")
+
+
 if __name__ == "__main__":
     app()

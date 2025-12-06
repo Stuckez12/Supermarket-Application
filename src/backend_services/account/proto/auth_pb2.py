@@ -20,10 +20,11 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from account.proto import account_enums_pb2 as account__enums__pb2
+from account.proto import common_enums_pb2 as common__enums__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\nauth.proto\x12\x0c\x61\x63\x63ount_auth\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13\x61\x63\x63ount_enums.proto"\xb3\x01\n\x0f\x41\x63\x63ountResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07role_id\x18\x02 \x01(\t\x12\x12\n\nfirst_name\x18\x03 \x01(\t\x12\x11\n\tlast_name\x18\x04 \x01(\t\x12\x10\n\x08verified\x18\x05 \x01(\x08\x12\x13\n\x0bmaster_user\x18\x06 \x01(\x08\x12\x35\n\x0buser_status\x18\x07 \x01(\x0e\x32 .account_enums.AccountStatusEnum"\xa7\x01\n\x1a\x41\x63\x63ountRegistrationRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x12\n\nfirst_name\x18\x03 \x01(\t\x12\x11\n\tlast_name\x18\x04 \x01(\t\x12\x31\n\rdate_of_birth\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06gender\x18\x06 \x01(\t"6\n\x13\x41\x63\x63ountLoginRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t2\xc6\x01\n\x12\x41\x63\x63ountAuthService\x12^\n\x13\x41\x63\x63ountRegistration\x12(.account_auth.AccountRegistrationRequest\x1a\x1d.account_auth.AccountResponse\x12P\n\x0c\x41\x63\x63ountLogin\x12!.account_auth.AccountLoginRequest\x1a\x1d.account_auth.AccountResponseb\x06proto3'
+    b'\n\nauth.proto\x12\x0c\x61\x63\x63ount_auth\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13\x61\x63\x63ount_enums.proto\x1a\x12\x63ommon_enums.proto"\xb3\x01\n\x0f\x41\x63\x63ountResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0f\n\x07role_id\x18\x02 \x01(\t\x12\x12\n\nfirst_name\x18\x03 \x01(\t\x12\x11\n\tlast_name\x18\x04 \x01(\t\x12\x10\n\x08verified\x18\x05 \x01(\x08\x12\x13\n\x0bmaster_user\x18\x06 \x01(\x08\x12\x35\n\x0buser_status\x18\x07 \x01(\x0e\x32 .account_enums.AccountStatusEnum"\xc1\x01\n\x1a\x41\x63\x63ountRegistrationRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x12\n\nfirst_name\x18\x03 \x01(\t\x12\x11\n\tlast_name\x18\x04 \x01(\t\x12\x31\n\rdate_of_birth\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12(\n\x06gender\x18\x06 \x01(\x0e\x32\x18.common_enums.GenderEnum"6\n\x13\x41\x63\x63ountLoginRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t2\xc6\x01\n\x12\x41\x63\x63ountAuthService\x12^\n\x13\x41\x63\x63ountRegistration\x12(.account_auth.AccountRegistrationRequest\x1a\x1d.account_auth.AccountResponse\x12P\n\x0c\x41\x63\x63ountLogin\x12!.account_auth.AccountLoginRequest\x1a\x1d.account_auth.AccountResponseb\x06proto3'
 )
 
 _globals = globals()
@@ -31,12 +32,12 @@ _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "auth_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
     DESCRIPTOR._loaded_options = None
-    _globals["_ACCOUNTRESPONSE"]._serialized_start = 83
-    _globals["_ACCOUNTRESPONSE"]._serialized_end = 262
-    _globals["_ACCOUNTREGISTRATIONREQUEST"]._serialized_start = 265
-    _globals["_ACCOUNTREGISTRATIONREQUEST"]._serialized_end = 432
-    _globals["_ACCOUNTLOGINREQUEST"]._serialized_start = 434
-    _globals["_ACCOUNTLOGINREQUEST"]._serialized_end = 488
-    _globals["_ACCOUNTAUTHSERVICE"]._serialized_start = 491
-    _globals["_ACCOUNTAUTHSERVICE"]._serialized_end = 689
+    _globals["_ACCOUNTRESPONSE"]._serialized_start = 103
+    _globals["_ACCOUNTRESPONSE"]._serialized_end = 282
+    _globals["_ACCOUNTREGISTRATIONREQUEST"]._serialized_start = 285
+    _globals["_ACCOUNTREGISTRATIONREQUEST"]._serialized_end = 478
+    _globals["_ACCOUNTLOGINREQUEST"]._serialized_start = 480
+    _globals["_ACCOUNTLOGINREQUEST"]._serialized_end = 534
+    _globals["_ACCOUNTAUTHSERVICE"]._serialized_start = 537
+    _globals["_ACCOUNTAUTHSERVICE"]._serialized_end = 735
 # @@protoc_insertion_point(module_scope)

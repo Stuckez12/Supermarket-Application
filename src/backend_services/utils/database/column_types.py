@@ -44,7 +44,7 @@ class EmailType(TypeDecorator):
 
 
 class PasswordType(TypeDecorator):
-    impl = String(64)
+    impl = String()
 
     def process_bind_param(self: Self, password: Any, _):
         v = DataVerification(config={"string": PASSWORD_CONFIG})

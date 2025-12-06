@@ -7,20 +7,19 @@ from account.proto import auth_pb2_grpc
 from account.routes import AccountAuthService
 from account.settings import settings
 
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
 
-logger = logging.getLogger(__name__)
-
 
 def add_services(server: grpc.Server) -> None:
     auth_pb2_grpc.add_AccountAuthServiceServicer_to_server(AccountAuthService(), server)
-    print("Service Added: User-Authentication")
+    logging.info("Service added: Account Authentication")
 
 
 def start_server() -> None:
-    logger.info("Beginning server setup")
+    logging.info("Initialising server")
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=settings.SERVER_MAX_WORKERS)
     )
@@ -34,17 +33,18 @@ def start_server() -> None:
         ]
     )
 
+    logging.info("Creating secure gRPC port")
     server.add_secure_port(f"[::]:{settings.SERVER_PORT}", server_credentials)
-    logger.info(
-        f"Starting gRPC server on https://{settings.SERVER_HOST}:{settings.SERVER_PORT}"
-    )
 
-    server.start()
-    logger.info("Server is running. Beginning server setup")
-
+    logging.info("Adding all gRPC services")
     add_services(server)
 
-    logger.info("Server is now ready")
+    logging.info(
+        f"Starting gRPC server on https://{settings.SERVER_HOST}:{settings.SERVER_PORT}"
+    )
+    server.start()
+    logging.info("Server is now ready")
+
     server.wait_for_termination()
 
 

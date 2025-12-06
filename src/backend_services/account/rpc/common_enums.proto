@@ -1,0 +1,9 @@
+syntax = "proto3";
+package common_enums;
+
+enum GenderEnum {
+    MALE = 0;
+    FEMALE = 1;
+    OTHER = 2;
+    PREFER_NOT_TO_SAY = 3;
+}

@@ -38,7 +38,7 @@ class AccountModel(BaseModel):
         Integer, default=0, nullable=False
     )
     account_locked_until: Mapped[datetime] = mapped_column(
-        Integer, default=0, nullable=True
+        DateTime, default=0, nullable=True
     )
     last_login: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     master_user: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)

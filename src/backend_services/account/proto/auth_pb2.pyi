@@ -1,5 +1,6 @@
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from account.proto import account_enums_pb2 as _account_enums_pb2
+from account.proto import common_enums_pb2 as _common_enums_pb2
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from typing import (
@@ -66,7 +67,7 @@ class AccountRegistrationRequest(_message.Message):
     first_name: str
     last_name: str
     date_of_birth: _timestamp_pb2.Timestamp
-    gender: str
+    gender: _common_enums_pb2.GenderEnum
     def __init__(
         self,
         email: _Optional[str] = ...,
@@ -74,7 +75,7 @@ class AccountRegistrationRequest(_message.Message):
         first_name: _Optional[str] = ...,
         last_name: _Optional[str] = ...,
         date_of_birth: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...,
-        gender: _Optional[str] = ...,
+        gender: _Optional[_Union[_common_enums_pb2.GenderEnum, str]] = ...,
     ) -> None: ...
 
 class AccountLoginRequest(_message.Message):

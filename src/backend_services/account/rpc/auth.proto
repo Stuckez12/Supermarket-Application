@@ -4,6 +4,7 @@ package account_auth;
 import "google/protobuf/timestamp.proto";
 
 import "account_enums.proto";
+import "common_enums.proto";
 
 
 message AccountResponse {
@@ -22,7 +23,7 @@ message AccountRegistrationRequest {
     string first_name = 3;
     string last_name = 4;
     google.protobuf.Timestamp date_of_birth = 5;
-    string gender = 6;
+    common_enums.GenderEnum gender = 6;
 }
 
 message AccountLoginRequest {

@@ -1,6 +1,9 @@
+from typing import Generator
+from sqlalchemy.orm import Session
+
 from utils.app_services.account import db_settings, db_url_obj
-from utils.database import db_connection, get_db as get_db_
+from utils.database import db_connection, get_db
 
 
-def get_db():
-    return get_db_(db_connection(db_url_obj, db_settings))
+def get_db_gen() -> Session:
+    return get_db(db_connection(db_url_obj, db_settings))

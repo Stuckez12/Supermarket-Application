@@ -1,51 +1,68 @@
-import string as string_lib
+import grpc
+import string
 
 from datetime import datetime
-from typing import Any, Self, Type
+from grpc import ServicerContext, StatusCode
+from typing import Any, Self
 
 from utils.schemas import DateTimeConfig, NumberConfig, StringConfig, DataTypeConfig
 
 
 class DataVerification:
-    def __init__(self: Self, config: dict[str, DataTypeConfig] | None = None):
+    def __init__(
+        self: Self,
+        grpc_context: ServicerContext | None = None,
+        config: dict[str, DataTypeConfig] | None = None,
+    ):
         if config is None:
             config = {}
 
+        self.grpc_context = grpc_context
         self.string = config.get("string", StringConfig())
         self.number = config.get("number", NumberConfig())
         self.datetime = config.get("datetime", DateTimeConfig())
 
+    def _raise_error(self: Self, error: str, error_type: StatusCode):
+        if self.grpc_context is not None:
+            self.grpc_context.abort(error_type, error)
+
+        raise ValueError(error)
+
     def verify_string(
-        self: Self, string: Any, param_name: str, config: StringConfig | None = None
+        self: Self, param: Any, param_name: str, config: StringConfig | None = None
     ):
         string_conf = config or self.string
 
         if not isinstance(string_conf, StringConfig):
-            raise ValueError(f"Invalid config provided. Expected StringConfig")
+            err = "Invalid config provided. Expected StringConfig"
 
-        if not isinstance(string, str):
-            raise ValueError(f"{param_name} is not of type string")
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
-        if not len(string) >= string_conf.min_len:
-            raise ValueError(
-                f"{param_name} must include a minimum of {string_conf.min_len} characters"
-            )
+        if not isinstance(param, str):
+            err = f"{param_name} is not of type string"
 
-        if not len(string) <= string_conf.max_len:
-            raise ValueError(
-                f"{param_name} must include a maximum of {string_conf.max_len} characters"
-            )
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+        if not len(param) >= string_conf.min_len:
+            err = f"{param_name} must include a minimum of {string_conf.min_len} characters"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+        if not len(param) <= string_conf.max_len:
+            err = f"{param_name} must include a maximum of {string_conf.max_len} characters"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
         lowercase = False
         uppercase = False
         numbers = False
         specials = False
 
-        for char in string:
+        for char in param:
             lowercase = char.islower() if char.islower() else lowercase
             uppercase = char.isupper() if char.isupper() else uppercase
             numbers = char.isdigit() if char.isdigit() else numbers
-            specials = True if char in string_lib.punctuation else specials
+            specials = True if char in string.punctuation else specials
 
         character_checks = [
             (
@@ -64,52 +81,73 @@ class DataVerification:
 
         for present, required, name in character_checks:
             if required is True and not present:
-                raise ValueError(f"{param_name} must include {name}")
+                err = f"{param_name} must include {name}"
+
+                self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
             if required is False and present:
-                raise ValueError(f"{param_name} must not include {name}")
+                err = f"{param_name} must not include {name}"
+
+                self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
     def verify_number(
-        self: Self, number: Any, param_name: str, config: NumberConfig | None = None
+        self: Self, param: Any, param_name: str, config: NumberConfig | None = None
     ):
         number_conf = config or self.number
 
         if not isinstance(number_conf, NumberConfig):
-            raise ValueError(f"Invalid config provided. Expected NumberConfig")
+            err = f"Invalid config provided. Expected NumberConfig"
 
-        if not isinstance(number, number_conf.number_type):
-            raise ValueError(f"{param_name} is not of type {number_conf.number_type}")
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
-        if not len(number) >= number_conf.min_val:
-            raise ValueError(
-                f"{param_name} must be larger than {number_conf.min_val - 1}"
-            )
+        if not isinstance(param, number_conf.number_type):
+            err = f"{param_name} is not of type {number_conf.number_type}"
 
-        if not len(number) <= number_conf.max_val:
-            raise ValueError(
-                f"{param_name} must be smaller than {number_conf.max_val + 1}"
-            )
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+        if param < number_conf.min_val:
+            err = f"{param_name} must be larger than {number_conf.min_val - 1}"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+        if param > number_conf.max_val:
+            err = f"{param_name} must be smaller than {number_conf.max_val + 1}"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
     def verify_datetime(
         self: Self,
-        date_time: Any,
+        param: Any,
         param_name: str,
         config: DateTimeConfig | None = None,
     ):
         datetime_conf = config or self.datetime
 
         if not isinstance(datetime_conf, DateTimeConfig):
-            raise ValueError(f"Invalid config provided. Expected DateTimeConfig")
+            err = f"Invalid config provided. Expected DateTimeConfig"
 
-        if not isinstance(date_time, datetime):
-            raise ValueError(f"{param_name} is not of type datetime")
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
 
-        if date_time < datetime_conf.min_datetime:
-            raise ValueError(
-                f"{param_name} must be larger than {datetime_conf.min_datetime}"
-            )
+        if not isinstance(param, datetime):
+            err = f"{param_name} is not of type datetime"
 
-        if date_time > datetime_conf.max_datetime:
-            raise ValueError(
-                f"{param_name} must be smaller than {datetime_conf.max_datetime}"
-            )
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+        if param < datetime_conf.min_datetime:
+            err = f"{param_name} must be larger than {datetime_conf.min_datetime}"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+        if param > datetime_conf.max_datetime:
+            err = f"{param_name} must be smaller than {datetime_conf.max_datetime}"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+
+    def convert_enums(self: Self, param: Any, param_name: str, mapping: dict):
+        try:
+            return mapping.get(param)
+
+        except:
+            err = f"{param_name} must be a valid enum. {param} is invalid"
+
+            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
