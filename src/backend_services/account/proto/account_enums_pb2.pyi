@@ -12,6 +12,7 @@ class AccountStatusEnum(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     LOCKED: _ClassVar[AccountStatusEnum]
     CLOSED: _ClassVar[AccountStatusEnum]
     TERMINATED: _ClassVar[AccountStatusEnum]
+
 UNVERIFIED: AccountStatusEnum
 INACTIVE: AccountStatusEnum
 ACTIVE: AccountStatusEnum

@@ -9,28 +9,24 @@ from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 _runtime_version.ValidateProtobufRuntimeVersion(
-    _runtime_version.Domain.PUBLIC,
-    5,
-    29,
-    0,
-    '',
-    'common_enums.proto'
+    _runtime_version.Domain.PUBLIC, 5, 29, 0, "", "common_enums.proto"
 )
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
-
-
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12\x63ommon_enums.proto\x12\x0c\x63ommon_enums*D\n\nGenderEnum\x12\x08\n\x04MALE\x10\x00\x12\n\n\x06\x46\x45MALE\x10\x01\x12\t\n\x05OTHER\x10\x02\x12\x15\n\x11PREFER_NOT_TO_SAY\x10\x03\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b"\n\x12\x63ommon_enums.proto\x12\x0c\x63ommon_enums*D\n\nGenderEnum\x12\x08\n\x04MALE\x10\x00\x12\n\n\x06\x46\x45MALE\x10\x01\x12\t\n\x05OTHER\x10\x02\x12\x15\n\x11PREFER_NOT_TO_SAY\x10\x03\x62\x06proto3"
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'common_enums_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "common_enums_pb2", _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  DESCRIPTOR._loaded_options = None
-  _globals['_GENDERENUM']._serialized_start=36
-  _globals['_GENDERENUM']._serialized_end=104
+    DESCRIPTOR._loaded_options = None
+    _globals["_GENDERENUM"]._serialized_start = 36
+    _globals["_GENDERENUM"]._serialized_end = 104
 # @@protoc_insertion_point(module_scope)

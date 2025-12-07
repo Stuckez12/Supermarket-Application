@@ -10,6 +10,7 @@ class GenderEnum(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     FEMALE: _ClassVar[GenderEnum]
     OTHER: _ClassVar[GenderEnum]
     PREFER_NOT_TO_SAY: _ClassVar[GenderEnum]
+
 MALE: GenderEnum
 FEMALE: GenderEnum
 OTHER: GenderEnum
