@@ -1,6 +1,4 @@
-import uuid
-
-from sqlalchemy import Boolean, Column, Enum, String
+from sqlalchemy import Column, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Self, cast, TYPE_CHECKING
 

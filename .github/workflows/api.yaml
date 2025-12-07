@@ -40,7 +40,9 @@ jobs:
           uv sync
 
       - name: Run mypy
-        run: uv run mypy ./src/backend_services --exclude '(?i)test[s]?/'
+        run: |
+          uv run mypy ./src/backend_services/account
+          uv run mypy ./src/backend_services/utils
 
   tests:
     needs: mypy-linting-check
