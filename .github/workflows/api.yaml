@@ -53,7 +53,7 @@ jobs:
           POSTGRES_USER: testing
           POSTGRES_PASSWORD: testing
         ports:
-          - 5432:5432
+          - 5435:5432
         options: >-
           --health-cmd="pg_isready -U myuser"
           --health-interval=5s
@@ -75,6 +75,4 @@ jobs:
           uv sync
 
       - name: Run Unit Tests
-        run: |
-          cd src/backend_services
-          uv run pytest -v tests/unit --cov=src/backend_services
+        run: uv run pytest -v src/backend_services/tests/unit --cov=src/backend_services

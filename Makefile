@@ -61,7 +61,21 @@ seed_db:
 # Testing
 ###################################################################
 
+test_db:
+	docker run -d --name postgres-testing -e POSTGRES_PASSWORD=testing -e POSTGRES_USER=testing -e POSTGRES_DB=account -p 5435:5432 postgres:latest
+
 unit_tests:
+	set PYTHON_ENV=testing&& \
 	set PYTHONDONTWRITEBYTECODE=1 && \
-	cd src/backend_services && \
-	uv run pytest -v tests/unit
+	uv run pytest -v src/backend_services/tests/unit
+
+unit_test_single:
+ifndef TEST
+	$(error 'TEST is not set. Usage: make auto_revision_db TEST="test/route/file.py"')
+endif
+
+	set PYTHON_ENV=testing&& \
+	set PYTHONDONTWRITEBYTECODE=1 && \
+	uv run pytest -vv -s $(TEST)
+
+print-shell:

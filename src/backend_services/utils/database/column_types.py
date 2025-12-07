@@ -14,6 +14,7 @@ from utils.exceptions import UnableToFetchDataDBException
 
 class EmailType(TypeDecorator):
     impl = String(96)
+    cache_ok = True
 
     def process_bind_param(self: Self, email: Any, _):
         v = DataVerification(config={"string": EMAIL_CONFIG})
@@ -32,10 +33,10 @@ class EmailType(TypeDecorator):
 
             validated_email = email_data.normalized
 
-        except EmailNotValidError:
+        except EmailNotValidError as e:
             logging.error("Attempted to insert invalid email into database")
 
-            raise ValueError("Invalid email address")
+            raise ValueError(f"Invalid email address: \n{e}")
 
         return validated_email
 
@@ -45,6 +46,7 @@ class EmailType(TypeDecorator):
 
 class PasswordType(TypeDecorator):
     impl = String()
+    cache_ok = True
 
     def process_bind_param(self: Self, password: Any, _):
         v = DataVerification(config={"string": PASSWORD_CONFIG})
@@ -59,6 +61,7 @@ class PasswordType(TypeDecorator):
 
 class GenderType(TypeDecorator):
     impl = Enum(GenderEnum)
+    cache_ok = True
 
     def process_bind_param(self: Self, gender: Any, _):
         if type(gender) != GenderEnum:
