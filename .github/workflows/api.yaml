@@ -84,3 +84,14 @@ jobs:
 
       - name: Run Unit Tests
         run: uv run pytest -v src/backend_services/tests/unit --cov=src
+        env:
+          PYTHON_ENV: testing
+
+          TEST_DATABASE_USERNAME: testing
+          TEST_DATABASE_PASSWORD: testing
+          TEST_DATABASE_HOST: localhost
+          TEST_DATABASE_PORT: 5435
+
+          ACCOUNT_SERVER_HOST: localhost
+          ACCOUNT_SERVER_PORT: 50000
+          ACCOUNT_SERVER_MAX_WORKERS: 10
