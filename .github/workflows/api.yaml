@@ -92,6 +92,6 @@ jobs:
           TEST_DATABASE_HOST: localhost
           TEST_DATABASE_PORT: 5435
 
-          ACCOUNT_SERVER_HOST: localhost
-          ACCOUNT_SERVER_PORT: 50000
-          ACCOUNT_SERVER_MAX_WORKERS: 10
+          ACCOUNT_SERVICE_HOST: localhost
+          ACCOUNT_SERVICE_PORT: 50000
+          ACCOUNT_SERVICE_MAX_WORKERS: 10
