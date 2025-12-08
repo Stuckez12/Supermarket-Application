@@ -1,9 +1,8 @@
-import grpc
 import string
 
 from datetime import datetime
 from grpc import ServicerContext, StatusCode
-from typing import Any, Self
+from typing import Any, Self, cast
 
 from utils.schemas import DateTimeConfig, NumberConfig, StringConfig, DataTypeConfig
 
@@ -18,9 +17,9 @@ class DataVerification:
             config = {}
 
         self.grpc_context = grpc_context
-        self.string = config.get("string", StringConfig())
-        self.number = config.get("number", NumberConfig())
-        self.datetime = config.get("datetime", DateTimeConfig())
+        self.string = cast(StringConfig, config.get("string", StringConfig()))
+        self.number = cast(NumberConfig, config.get("number", NumberConfig()))
+        self.datetime = cast(DateTimeConfig, config.get("datetime", DateTimeConfig()))
 
     def _raise_error(self: Self, error: str, error_type: StatusCode):
         if self.grpc_context is not None:

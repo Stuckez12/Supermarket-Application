@@ -1,8 +1,7 @@
-import logging
 import os
 
-from pydantic import ConfigDict, Field
-from pydantic_settings import BaseSettings
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Type
 
 from utils.schemas import DatabaseURL
@@ -30,7 +29,7 @@ class DevelopmentSettings(BaseSettings):
     PGADMIN_EMAIL: str
     PGADMIN_PASSWORD: str
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         env_ignore_empty=True,
@@ -65,7 +64,7 @@ class TestSettings(BaseSettings):
     TEST_DATABASE_HOST: str
     TEST_DATABASE_PORT: int
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
         env_ignore_empty=True,
@@ -82,12 +81,21 @@ SETTING_TYPE = DevelopmentSettings | TestSettings
 def get_settings() -> SETTING_TYPE:
     environment = os.getenv("PYTHON_ENV", "development")
 
-    all_envs: dict[str, Type[BaseSettings]] = {
+    all_envs: dict[str, Type[SETTING_TYPE]] = {
         "development": DevelopmentSettings,
         "testing": TestSettings,
     }
 
-    return all_envs.get(environment)()
+    settings = all_envs.get(environment)
+
+    if settings is None:
+        raise SystemError(
+            "PYTHON_ENV environment param has invalid value."
+            f"Expected one of the following: {[env for env in all_envs.keys()]}"
+            f"Received this invalid value instead: {environment}"
+        )
+
+    return settings()  # type: ignore[call-arg]
 
 
 settings = get_settings()

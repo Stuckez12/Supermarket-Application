@@ -14,7 +14,7 @@ GENDER_ENUM_MAPPING: dict[GRPCGenderEnum, PythonGenderEnum] = {
     GRPCGenderEnum.PREFER_NOT_TO_SAY: PythonGenderEnum.PREFER_NOT_TO_SAY,
 }
 
-ACCOUNT_STATUS_MAPPING: dict[GRPCGenderEnum, PythonGenderEnum] = {
+ACCOUNT_STATUS_MAPPING: dict[PythonAccountStatusEnum, GRPCAccountStatusEnum] = {
     PythonAccountStatusEnum.ACTIVE: GRPCAccountStatusEnum.ACTIVE,
     PythonAccountStatusEnum.INACTIVE: GRPCAccountStatusEnum.INACTIVE,
     PythonAccountStatusEnum.UNVERIFIED: GRPCAccountStatusEnum.UNVERIFIED,

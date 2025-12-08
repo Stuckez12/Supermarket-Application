@@ -90,7 +90,7 @@ def test_customer(session: Session):
         first_name="Test",
         last_name="Account",
         date_of_birth=datetime.now(),
-        gender=GenderEnum.MALE,
+        gender=GenderEnum.MALE,  # type: ignore[arg-type]
         email_verified=True,
         user_status=AccountStatusEnum.ACTIVE,
         role_id=role.id,

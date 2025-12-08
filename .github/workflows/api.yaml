@@ -3,6 +3,7 @@ name: Backend API CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   black-format-check:
@@ -21,7 +22,7 @@ jobs:
       - name: Run Black (check only)
         run: black --check .
 
-  mypy-linting-check:
+  linting-check:
     needs: black-format-check
     runs-on: ubuntu-latest
 
@@ -39,13 +40,18 @@ jobs:
           pip install uv
           uv sync
 
+      # Main linter check used to format codebase
       - name: Run mypy
         run: |
-          uv run mypy ./src/backend_services/account
-          uv run mypy ./src/backend_services/utils
+          uv run mypy .
+
+      # Extra linter check targeting specific issues not covered by base linter
+      - name: Run flake8
+        run: |
+          uv run flake8 src/
 
   tests:
-    needs: mypy-linting-check
+    needs: linting-check
     runs-on: ubuntu-latest
 
     services:
@@ -77,4 +83,4 @@ jobs:
           uv sync
 
       - name: Run Unit Tests
-        run: uv run pytest -v src/backend_services/tests/unit --cov=src/backend_services
+        run: uv run pytest -v src/backend_services/tests/unit --cov=src

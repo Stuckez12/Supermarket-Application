@@ -2,8 +2,9 @@
 # DEVELOPMENT ASSISTANCE
 ###################################################################
 
-check_imports:
-	pycycle --here
+linting:
+	uv run mypy .
+	uv run flake8 .
 
 
 ################################################################### 
@@ -39,21 +40,21 @@ full-restart:
 # DATABASES
 ###################################################################
 
-upgrade_db:
+upgrade-db:
 	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini upgrade head
 
 VERSION ?= -1
-downgrade_db:
+downgrade-db:
 	@echo "Downgrading to/by $(VERSION) version"
 	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini downgrade $(VERSION)
 
-auto_revision_db:
+auto-revision-db:
 ifndef MESSAGE
-	$(error 'MESSAGE is not set. Usage: make auto_revision_db MESSAGE="message"')
+	$(error 'MESSAGE is not set. Usage: make auto-revision-db MESSAGE="message"')
 endif
 	@docker-compose -f docker-compose.dev.yaml exec account alembic -c /api/account/alembic.ini revision --autogenerate -m "$(MESSAGE)"
 
-seed_db:
+seed-db:
 	@docker-compose -f docker-compose.dev.yaml exec account python account/app_management.py seed-db
 
 
@@ -61,21 +62,20 @@ seed_db:
 # Testing
 ###################################################################
 
-test_db:
+test-db:
 	docker run -d --name postgres-testing -e POSTGRES_PASSWORD=testing -e POSTGRES_USER=testing -e POSTGRES_DB=account -p 5435:5432 postgres:latest
 
-unit_tests:
+UNIT_TEST ?=
+unit-tests:
 	set PYTHON_ENV=testing&& \
 	set PYTHONDONTWRITEBYTECODE=1 && \
-	uv run pytest -v src/backend_services/tests/unit
+	uv run pytest -v src/backend_services/tests/unit/$(UNIT_TEST)
 
-unit_test_single:
+specify-tests:
 ifndef TEST
-	$(error 'TEST is not set. Usage: make auto_revision_db TEST="test/route/file.py"')
+	$(error 'TEST is not set. Usage: make specify-tests TEST="test/route/file.py"')
 endif
 
 	set PYTHON_ENV=testing&& \
 	set PYTHONDONTWRITEBYTECODE=1 && \
 	uv run pytest -vv -s $(TEST)
-
-print-shell:

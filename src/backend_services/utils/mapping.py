@@ -1,6 +1,3 @@
-import logging
-
-from enum import Enum
 from grpc import ServicerContext, StatusCode
 from typing import Any, Self
 
@@ -26,10 +23,10 @@ class EnumMapping:
 
     # TODO: Complete this func
     @classmethod
-    def named(cls: Self, enum_1: Enum, enum_2, context: ServicerContext | None = None):
+    def named(cls, enum_1: Any, enum_2: Any, context: ServicerContext | None = None):
         assert len(enum_1) == len(enum_2), "Both enums must be the same length"
 
-        mapping = {}
+        mapping: dict = {}
 
         return cls(mapping, context)
 

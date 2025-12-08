@@ -1,0 +1,6 @@
+[flake8]
+exclude =
+    */__init__.py,
+    .venv,
+    src/backend_services/account/proto
+select = F401,F821

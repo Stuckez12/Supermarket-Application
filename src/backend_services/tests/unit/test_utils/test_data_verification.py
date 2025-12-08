@@ -1,7 +1,7 @@
 import pytest
 
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Type
 
 from utils.data_verification import DataVerification
 from utils.enums import TriBool
@@ -66,7 +66,7 @@ class TestDataVerification:
         self,
         test_data_verify: DataVerification,
         param: Any,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         with pytest.raises(exception, match=error_message):
@@ -147,7 +147,7 @@ class TestDataVerification:
         self,
         param: Any,
         config: dict,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         verify = DataVerification(config={"string": StringConfig(**config)})
@@ -231,7 +231,7 @@ class TestDataVerification:
         test_data_verify: DataVerification,
         param: Any,
         config: dict,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         with pytest.raises(exception, match=error_message):
@@ -273,7 +273,7 @@ class TestDataVerification:
         self,
         test_data_verify: DataVerification,
         param: Any,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         with pytest.raises(exception, match=error_message):
@@ -346,7 +346,7 @@ class TestDataVerification:
         self,
         param: Any,
         config: dict,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         verify = DataVerification(config={"number": NumberConfig(**config)})
@@ -422,7 +422,7 @@ class TestDataVerification:
         test_data_verify: DataVerification,
         param: Any,
         config: dict,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         with pytest.raises(exception, match=error_message):
@@ -486,7 +486,7 @@ class TestDataVerification:
         self,
         param: Any,
         config: dict,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         verify = DataVerification(config={"datetime": DateTimeConfig(**config)})
@@ -553,7 +553,7 @@ class TestDataVerification:
         test_data_verify: DataVerification,
         param: Any,
         config: dict,
-        exception: BaseException,
+        exception: Type[BaseException],
         error_message: str,
     ):
         with pytest.raises(exception, match=error_message):

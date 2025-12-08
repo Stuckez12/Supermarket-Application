@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from sqlalchemy import Table
 from sqlalchemy.orm import Session
 from typing import Self, TypeVar
 from uuid import UUID
@@ -16,7 +15,7 @@ class BaseDBService:
 
     @property
     @abstractmethod
-    def table(self: Self) -> Table:
+    def table(self: Self):
         pass
 
     def get_by_id(self: Self, id: UUID):

@@ -1,4 +1,3 @@
-from contextlib import contextmanager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
@@ -26,7 +25,7 @@ def db_connection(url: DatabaseURL, settings: DatabaseSettings) -> sessionmaker:
 
 
 def get_db(session_factory: sessionmaker) -> Generator[Session, None, None]:
-    db: Generator[Session, None, None] = session_factory()
+    db: Session = session_factory()
 
     try:
         yield db
