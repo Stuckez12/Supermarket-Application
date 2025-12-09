@@ -27,6 +27,7 @@ class Initialise:
         self.grpc_context = grpc_context
 
     def _raise_error(self: Self, error: str, error_type: StatusCode):
+        print("error occurred here")
         if self.grpc_context is not None:
             self.grpc_context.abort(error_type, error)
 
@@ -63,6 +64,7 @@ class Initialise:
         try:
             self.db.execute(text("SELECT 1"))
             logging.info("Database reachable")
+            print("reachable db")
 
         except (OperationalError, DatabaseError, InterfaceError):
             logging.error("Unable to connect to the database on startup")
