@@ -44,6 +44,8 @@ class Initialise:
                 create_database(self.db_url)
                 print("we done made it")
 
+                print(f"URL: {self.db_url}")
+
             else:
                 print("why not env correct")
                 error_message = (
