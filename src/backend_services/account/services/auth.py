@@ -16,16 +16,6 @@ class AuthService(BaseDBService):
         return AccountModel
 
     def is_email_used(self: Self, email: str):
-        engine = self.db.get_bind()  # returns the Engine bound to this session
-
-        print(str(engine.url))
-        print(str(engine.url))
-        print(str(engine.url))
-        print(str(engine.url))
-        print(str(engine.url))
-
-        print(self.db.execute(text("SELECT 1")))
-
         return (
             self.db.query(AccountModel)
             .filter(AccountModel.email == email)

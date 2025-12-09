@@ -39,16 +39,9 @@ TEST_DB_SETTINGS = DatabaseSettings(
 def initialise_db():
     external_checks = Initialise(TEST_DB_URL_OBJ, TEST_DB_SETTINGS)
 
-    print(TEST_DB_URL_OBJ)
-
-    print("Db existing?")
     external_checks.create_database_if_not_exists()
-    print("Checking")
     external_checks.check_database_connection()
-    print("Wrapping up")
     external_checks.wrap_up_initialisation()
-
-    print(get_database_url(TEST_DB_URL_OBJ))
 
     alembic_cfg = Config("src/backend_services/account/alembic.ini")
     alembic_cfg.set_main_option("sqlalchemy.url", get_database_url(TEST_DB_URL_OBJ))
