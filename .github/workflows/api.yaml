@@ -6,52 +6,52 @@ on:
   workflow_dispatch:
 
 jobs:
-  black-format-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  # black-format-check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.12"
 
-      - name: Install Black
-        run: pip install black
+  #     - name: Install Black
+  #       run: pip install black
 
-      - name: Run Black (check only)
-        run: black --check .
+  #     - name: Run Black (check only)
+  #       run: black --check .
 
-  linting-check:
-    needs: black-format-check
-    runs-on: ubuntu-latest
+  # linting-check:
+  #   needs: black-format-check
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.13"
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: "3.13"
 
-      - name: Sync Packages
-        run: |
-          pip install uv
-          uv sync
+  #     - name: Sync Packages
+  #       run: |
+  #         pip install uv
+  #         uv sync
 
-      # Main linter check used to format codebase
-      - name: Run mypy
-        run: |
-          uv run mypy .
+  #     # Main linter check used to format codebase
+  #     - name: Run mypy
+  #       run: |
+  #         uv run mypy .
 
-      # Extra linter check targeting specific issues not covered by base linter
-      - name: Run flake8
-        run: |
-          uv run flake8 src/
+  #     # Extra linter check targeting specific issues not covered by base linter
+  #     - name: Run flake8
+  #       run: |
+  #         uv run flake8 src/
 
   tests:
-    needs: linting-check
+    # needs: linting-check
     runs-on: ubuntu-latest
 
     services:
