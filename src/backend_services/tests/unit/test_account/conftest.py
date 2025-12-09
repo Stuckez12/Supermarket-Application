@@ -71,7 +71,22 @@ def db_generator(db_conn):
 
 @pytest.fixture
 def session(db_generator):
-    yield next(db_generator)
+    db = next(db_generator)
+
+    engine = db.get_bind()
+
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+    print(str(engine.url))
+
+    yield db
 
 
 # ========================================================================== #
