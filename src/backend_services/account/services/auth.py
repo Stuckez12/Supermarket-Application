@@ -1,8 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import Self
 
-from sqlalchemy import text
-
 from account.models import AccountModel
 from account.services.base import BaseDBService
 

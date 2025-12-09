@@ -1,4 +1,3 @@
-import copy
 import pytest
 
 from alembic import command
