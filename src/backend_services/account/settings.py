@@ -45,10 +45,10 @@ class TestSettings(BaseSettings):
     SERVER_PORT: int = Field(..., validation_alias="ACCOUNT_SERVICE_PORT")
     SERVER_MAX_WORKERS: int = Field(..., validation_alias="ACCOUNT_SERVICE_MAX_WORKERS")
 
-    DATABASE_USERNAME: str | None = None
-    DATABASE_PASSWORD: str | None = None
-    DATABASE_HOST: str | None = None
-    DATABASE_PORT: int | None = None
+    TEST_DATABASE_USERNAME: str
+    TEST_DATABASE_PASSWORD: str
+    TEST_DATABASE_HOST: str
+    TEST_DATABASE_PORT: int
 
     def get_db_url(self):
         return DatabaseURL(
@@ -58,11 +58,6 @@ class TestSettings(BaseSettings):
             port=self.TEST_DATABASE_PORT,
             db_name="NONE",
         )
-
-    TEST_DATABASE_USERNAME: str
-    TEST_DATABASE_PASSWORD: str
-    TEST_DATABASE_HOST: str
-    TEST_DATABASE_PORT: int
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -99,3 +94,6 @@ def get_settings() -> SETTING_TYPE:
 
 
 settings = get_settings()
+
+IS_DEVELOPMENT_ENV = isinstance(settings, DevelopmentSettings)
+IS_TESTING_ENV = isinstance(settings, TestSettings)

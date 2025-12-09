@@ -3,9 +3,13 @@ import logging
 
 from concurrent import futures
 
+from account.common.utils.seed_db import seed_db
 from account.proto import auth_pb2_grpc
 from account.routes import AccountAuthService
 from account.settings import settings
+
+from utils.app_initialise import Initialise
+from utils.app_services.account import account_db_settings, account_db_url_obj
 
 
 logging.basicConfig(
@@ -19,6 +23,17 @@ def add_services(server: grpc.Server) -> None:
 
 
 def start_server() -> None:
+    logging.info("Beginning external checks")
+    logging.info("- Database checks")
+    external_checks = Initialise(account_db_url_obj, account_db_settings)
+
+    external_checks.check_database_connection()
+    external_checks.create_database_if_not_exists()
+    external_checks.initialise_database("api/account/alembic.ini", seed_db)
+
+    logging.info("- Finalising checks")
+    external_checks.wrap_up_initialisation()
+
     logging.info("Initialising server")
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=settings.SERVER_MAX_WORKERS)

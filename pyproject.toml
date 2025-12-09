@@ -19,8 +19,10 @@ dependencies = [
     "pytest>=9.0.1",
     "pytest-cov>=7.0.0",
     "sqlalchemy>=2.0.44",
+    "sqlalchemy-utils>=0.42.0",
     "typer>=0.20.0",
     "types-grpcio>=1.0.0.20251009",
     "types-protobuf>=6.32.1.20251105",
+    "types-sqlalchemy-utils>=1.1.0",
     "uvicorn>=0.38.0",
 ]

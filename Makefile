@@ -3,6 +3,7 @@
 ###################################################################
 
 linting:
+	uv run black . --check
 	uv run mypy .
 	uv run flake8 .
 

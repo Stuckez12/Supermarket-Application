@@ -21,7 +21,9 @@ class DataVerification:
         self.number = cast(NumberConfig, config.get("number", NumberConfig()))
         self.datetime = cast(DateTimeConfig, config.get("datetime", DateTimeConfig()))
 
-    def _raise_error(self: Self, error: str, error_type: StatusCode):
+    def _raise_error(
+        self: Self, error: str, error_type: StatusCode = StatusCode.INTERNAL
+    ):
         if self.grpc_context is not None:
             self.grpc_context.abort(error_type, error)
 
@@ -37,22 +39,22 @@ class DataVerification:
         if not isinstance(string_conf, StringConfig):
             err = "Invalid config provided. Expected StringConfig"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if not isinstance(param, str):
             err = f"{param_name} is not of type string"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if not len(param) >= string_conf.min_len:
             err = f"{param_name} must include a minimum of {string_conf.min_len} characters"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if not len(param) <= string_conf.max_len:
             err = f"{param_name} must include a maximum of {string_conf.max_len} characters"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         lowercase = False
         uppercase = False
@@ -84,12 +86,12 @@ class DataVerification:
             if required is True and not present:
                 err = f"{param_name} must include {name}"
 
-                self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+                self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
             if required is False and present:
                 err = f"{param_name} must not include {name}"
 
-                self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+                self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
     def verify_number(
         self: Self, param: Any, param_name: str, config: NumberConfig | None = None
@@ -99,22 +101,22 @@ class DataVerification:
         if not isinstance(number_conf, NumberConfig):
             err = f"Invalid config provided. Expected NumberConfig"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if not isinstance(param, number_conf.number_type):
             err = f"{param_name} is not of type {number_conf.number_type.__name__}"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if param < number_conf.min_val:
             err = f"{param_name} must be equal or larger than {number_conf.min_val}"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if param > number_conf.max_val:
             err = f"{param_name} must be equal or smaller than {number_conf.max_val}"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
     def verify_datetime(
         self: Self,
@@ -127,19 +129,19 @@ class DataVerification:
         if not isinstance(datetime_conf, DateTimeConfig):
             err = f"Invalid config provided. Expected DateTimeConfig"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if not isinstance(param, datetime):
             err = f"{param_name} is not of type datetime"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if param < datetime_conf.min_datetime:
             err = f"{param_name} must be larger than {datetime_conf.min_datetime}: {param}"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
 
         if param > datetime_conf.max_datetime:
             err = f"{param_name} must be smaller than {datetime_conf.max_datetime}"
 
-            self._raise_error(err, StatusCode.INVALID_ARGUMENT)
+            self._raise_error(err, error_type=StatusCode.INVALID_ARGUMENT)
