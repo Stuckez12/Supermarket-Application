@@ -11,6 +11,8 @@ from account.models import AccountModel, RoleModel
 from account.settings import settings
 from account.services import AuthService
 
+from utils.app_initialise import Initialise
+from utils.app_services.account import account_db_settings, account_db_url_obj
 from utils.database import get_db, db_connection, get_database_url
 from utils.enums import AccountRoleEnum, AccountStatusEnum, GenderEnum
 from utils.schemas import DatabaseSettings
@@ -34,7 +36,13 @@ TEST_DB_SETTINGS = DatabaseSettings(
 
 
 @pytest.fixture(scope="session", autouse=True)
-def migrate_db():
+def initialise_db():
+    external_checks = Initialise(account_db_url_obj, account_db_settings)
+
+    external_checks.check_database_connection()
+    external_checks.create_database_if_not_exists()
+    external_checks.wrap_up_initialisation()
+
     alembic_cfg = Config("src/backend_services/account/alembic.ini")
     alembic_cfg.set_main_option("sqlalchemy.url", get_database_url(TEST_DB_URL_OBJ))
     command.upgrade(alembic_cfg, "head")
