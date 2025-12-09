@@ -27,8 +27,8 @@ def start_server() -> None:
     logging.info("- Database checks")
     external_checks = Initialise(account_db_url_obj, account_db_settings)
 
-    external_checks.check_database_connection()
     external_checks.create_database_if_not_exists()
+    external_checks.check_database_connection()
     external_checks.initialise_database("api/account/alembic.ini", seed_db)
 
     logging.info("- Finalising checks")

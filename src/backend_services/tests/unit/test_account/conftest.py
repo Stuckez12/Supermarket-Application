@@ -1,3 +1,4 @@
+import copy
 import pytest
 
 from alembic import command
@@ -37,10 +38,12 @@ TEST_DB_SETTINGS = DatabaseSettings(
 
 @pytest.fixture(scope="session", autouse=True)
 def initialise_db():
-    external_checks = Initialise(account_db_url_obj, account_db_settings)
+    url_obj = copy.deepcopy(account_db_url_obj)
+    url_obj.db_name = "test_account"
+    external_checks = Initialise(url_obj, account_db_settings)
 
-    external_checks.check_database_connection()
     external_checks.create_database_if_not_exists()
+    external_checks.check_database_connection()
     external_checks.wrap_up_initialisation()
 
     alembic_cfg = Config("src/backend_services/account/alembic.ini")
