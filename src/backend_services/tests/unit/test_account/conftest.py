@@ -48,6 +48,8 @@ def initialise_db():
     print("Wrapping up")
     external_checks.wrap_up_initialisation()
 
+    print(get_database_url(TEST_DB_URL_OBJ))
+
     alembic_cfg = Config("src/backend_services/account/alembic.ini")
     alembic_cfg.set_main_option("sqlalchemy.url", get_database_url(TEST_DB_URL_OBJ))
     command.upgrade(alembic_cfg, "head")
@@ -72,19 +74,6 @@ def db_generator(db_conn):
 @pytest.fixture
 def session(db_generator):
     db = next(db_generator)
-
-    engine = db.get_bind()
-
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
-    print(str(engine.url))
 
     yield db
 
