@@ -35,12 +35,17 @@ class Initialise:
         raise ValueError(error)
 
     def create_database_if_not_exists(self: Self):
+        print("Does db exist")
         if not database_exists(self.db_url):
+            print("it does not")
             if os.environ.get("PYTHON_ENV") == "testing":
+                print("we creating")
                 logging.info("Database does not exist. Creating new database")
                 create_database(self.db_url)
+                print("we done made it")
 
             else:
+                print("why not env correct")
                 error_message = (
                     "Trying to access database that does not exist\n"
                     "Manually create database then restart server\n"
@@ -49,6 +54,7 @@ class Initialise:
                 self._raise_error(error_message, error_type=StatusCode.NOT_FOUND)
 
         else:
+            print("database exists ?????")
             logging.info("Database already exists")
 
     def check_database_connection(self: Self):

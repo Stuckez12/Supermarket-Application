@@ -70,7 +70,7 @@ UNIT_TEST ?=
 unit-tests:
 	set PYTHON_ENV=testing&& \
 	set PYTHONDONTWRITEBYTECODE=1 && \
-	uv run pytest -v src/backend_services/tests/unit/$(UNIT_TEST) --cov=src
+	uv run pytest -vv -s src/backend_services/tests/unit/$(UNIT_TEST) --cov=src
 
 specify-tests:
 ifndef TEST

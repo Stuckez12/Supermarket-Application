@@ -83,7 +83,7 @@ jobs:
           uv sync
 
       - name: Run Unit Tests
-        run: uv run pytest -v src/backend_services/tests/unit --cov=src
+        run: uv run pytest -vv -s src/backend_services/tests/unit --cov=src
         env:
           PYTHON_ENV: testing
 

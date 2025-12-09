@@ -42,8 +42,11 @@ def initialise_db():
     url_obj.db_name = "test_account"
     external_checks = Initialise(url_obj, account_db_settings)
 
+    print("Db existing?")
     external_checks.create_database_if_not_exists()
+    print("Checking")
     external_checks.check_database_connection()
+    print("Wrapping up")
     external_checks.wrap_up_initialisation()
 
     alembic_cfg = Config("src/backend_services/account/alembic.ini")
