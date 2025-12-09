@@ -25,7 +25,7 @@ from utils.schemas import DatabaseSettings
 
 
 TEST_DB_URL_OBJ = settings.get_db_url()
-TEST_DB_URL_OBJ.db_name = "account"
+TEST_DB_URL_OBJ.db_name = "test_account"
 
 TEST_DB_SETTINGS = DatabaseSettings(
     pool_pre_ping=True,
@@ -38,9 +38,7 @@ TEST_DB_SETTINGS = DatabaseSettings(
 
 @pytest.fixture(scope="session", autouse=True)
 def initialise_db():
-    url_obj = copy.deepcopy(account_db_url_obj)
-    url_obj.db_name = "test_account"
-    external_checks = Initialise(url_obj, account_db_settings)
+    external_checks = Initialise(TEST_DB_URL_OBJ, TEST_DB_SETTINGS)
 
     print("Db existing?")
     external_checks.create_database_if_not_exists()
