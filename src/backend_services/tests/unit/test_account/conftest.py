@@ -24,7 +24,7 @@ from utils.schemas import DatabaseSettings
 
 
 TEST_DB_URL_OBJ = settings.get_db_url()
-TEST_DB_URL_OBJ.db_name = "test_account"
+TEST_DB_URL_OBJ.db_name = "account"
 
 TEST_DB_SETTINGS = DatabaseSettings(
     pool_pre_ping=True,
