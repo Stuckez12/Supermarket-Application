@@ -13,7 +13,6 @@ from account.settings import settings
 from account.services import AuthService
 
 from utils.app_initialise import Initialise
-from utils.app_services.account import account_db_settings, account_db_url_obj
 from utils.database import get_db, db_connection, get_database_url
 from utils.enums import AccountRoleEnum, AccountStatusEnum, GenderEnum
 from utils.schemas import DatabaseSettings
@@ -39,6 +38,8 @@ TEST_DB_SETTINGS = DatabaseSettings(
 @pytest.fixture(scope="session", autouse=True)
 def initialise_db():
     external_checks = Initialise(TEST_DB_URL_OBJ, TEST_DB_SETTINGS)
+
+    print(TEST_DB_URL_OBJ)
 
     print("Db existing?")
     external_checks.create_database_if_not_exists()
