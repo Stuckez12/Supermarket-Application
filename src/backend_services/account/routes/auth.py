@@ -61,9 +61,6 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
 
             role = role_service.get_by_name(AccountRoleEnum.CUSTOMER.value)
 
-            if role is None:
-                raise NoResultFound
-
             new_account = AccountModel(
                 email=request.email,
                 password=request.password,
@@ -89,7 +86,7 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
                 user_status=status_mapper.get_alternate_enum(new_account.user_status),
             )
 
-        except NoResultFound:
+        except LookupError:
             logging.error("Unable to find customer role")
             logging.error("Cancelled account registration")
 
@@ -124,7 +121,7 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
             )
 
             if not PasswordHasher().verify(account.password, request.password):
-                raise LookupError
+                raise ValueError("Password does not match")
 
             return auth_pb2.AccountResponse(
                 id=str(account.id),
@@ -136,7 +133,7 @@ class AccountAuthService(auth_pb2_grpc.AccountAuthService):
                 user_status=status_mapper.get_alternate_enum(account.user_status),
             )
 
-        except (NoResultFound, LookupError):
+        except (NoResultFound, ValueError):
             logging.error("Unable to find account")
             logging.error("Cancelled account login")
 

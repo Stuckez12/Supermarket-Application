@@ -9,7 +9,10 @@ from account.routes import AccountAuthService
 from account.settings import settings
 
 from utils.app_initialise import Initialise
-from utils.app_services.account import account_db_settings, account_db_url_obj
+from utils.services.database import (
+    account_db_settings,
+    account_db_url_obj,
+)
 
 
 logging.basicConfig(

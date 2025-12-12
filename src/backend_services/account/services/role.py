@@ -13,5 +13,10 @@ class RoleService(BaseDBService):
     def table(self):
         return RoleModel
 
-    def get_by_name(self: Self, name: str):
-        return self.db.query(self.table).filter(self.table.name == name).first()
+    def get_by_name(self: Self, name: str) -> RoleModel:
+        role = self.db.query(self.table).filter(self.table.name == name).first()
+
+        if role is None:
+            raise LookupError("Role does not exist")
+
+        return role
