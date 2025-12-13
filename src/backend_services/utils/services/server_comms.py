@@ -4,16 +4,18 @@ import time
 
 from google.protobuf.message import Message
 from grpc import RpcError, StatusCode
-from typing import Callable, TypeVar
+from typing import Callable, Generic, TypeVar
 
 from utils.constants import GRPC_CHANNEL_OPTIONS
 
 
+REQUEST_MESSAGE = TypeVar("REQUEST_MESSAGE", bound=Message)
+RESPONSE_MESSAGE = TypeVar("RESPONSE_MESSAGE", bound=Message)
 REQUESTS = TypeVar("REQUESTS")
 STUBS = TypeVar("STUBS")
 
 
-class ServerCommunication:
+class ServerCommunication(Generic[RESPONSE_MESSAGE]):
     def __init__(
         self,
         channel_host: str,
@@ -67,8 +69,8 @@ class ServerCommunication:
         self,
         request: str,
         stub: Callable[[], STUBS],
-        data: Message,
-    ) -> Message:
+        data: REQUEST_MESSAGE,
+    ) -> RESPONSE_MESSAGE:
         for attempt in range(self.max_retries):
             try:
                 stub_channel = stub(self.channel)  # type: ignore[call-arg]

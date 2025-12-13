@@ -28,13 +28,13 @@ class AccountLogin(BaseModel):
     password: str
 
     @field_validator("email")
-    def validate_email(param: str):
+    def validate_email(param: str):  # type: ignore[misc]
         DataVerification().verify_string(param, param_name="Email", config=EMAIL_CONFIG)
 
         return param
 
     @field_validator("password")
-    def validate_password(param: str):
+    def validate_password(param: str):  # type: ignore[misc]
         DataVerification().verify_string(
             param, param_name="Password", config=PASSWORD_CONFIG
         )
@@ -49,7 +49,7 @@ class AccountRegistration(AccountLogin):
     gender: GenderEnum
 
     @field_validator("first_name")
-    def validate_first_name(param: str):
+    def validate_first_name(param: str):  # type: ignore[misc]
         DataVerification().verify_string(
             param, param_name="First name", config=FIRST_NAME_CONFIG
         )
@@ -57,7 +57,7 @@ class AccountRegistration(AccountLogin):
         return param
 
     @field_validator("last_name")
-    def validate_last_name(param: str):
+    def validate_last_name(param: str):  # type: ignore[misc]
         DataVerification().verify_string(
             param, param_name="Last name", config=LAST_NAME_CONFIG
         )
@@ -65,7 +65,7 @@ class AccountRegistration(AccountLogin):
         return param
 
     @field_validator("date_of_birth")
-    def validate_date_of_birth(param: datetime):
+    def validate_date_of_birth(param: datetime):  # type: ignore[misc]
         minimum = datetime.now(timezone.utc) - relativedelta(years=13)
         maximum = datetime.now(timezone.utc) - relativedelta(years=120)
 
