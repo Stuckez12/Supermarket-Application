@@ -8,7 +8,7 @@ from typing import Any, Self
 
 from utils.constants import EMAIL_CONFIG, PASSWORD_CONFIG
 from utils.data_verification import DataVerification
-from utils.enums import GenderEnum
+from utils.enums.enums import GenderEnum
 from utils.exceptions import UnableToFetchDataDBException
 
 

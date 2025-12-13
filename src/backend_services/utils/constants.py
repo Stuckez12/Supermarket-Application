@@ -1,4 +1,4 @@
-from utils.enums import TriBool
+from utils.enums.enums import TriBool
 from utils.schemas.data_verification import StringConfig
 
 

@@ -6,8 +6,7 @@ from grpc import ServicerContext, StatusCode
 from sqlalchemy.exc import NoResultFound
 from typing import Self
 
-from utils.proto.account import auth_pb2, auth_pb2_grpc
-from account.common.utils import get_db_gen, ACCOUNT_STATUS_MAPPING, GENDER_ENUM_MAPPING
+from account.common.utils import get_db_gen
 from account.models import AccountModel
 from account.services import AuthService, RoleService
 
@@ -18,8 +17,10 @@ from utils.constants import (
     PASSWORD_CONFIG,
 )
 from utils.data_verification import DataVerification
-from utils.enums import AccountRoleEnum, AccountStatusEnum
+from utils.enums.enums import AccountRoleEnum, AccountStatusEnum
+from utils.enums.mappings import ACCOUNT_STATUS_MAPPING, GENDER_ENUM_MAPPING
 from utils.mapping import EnumMapping
+from utils.proto.account import auth_pb2, auth_pb2_grpc
 from utils.schemas.data_verification import DateTimeConfig
 
 

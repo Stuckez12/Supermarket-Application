@@ -18,7 +18,7 @@ from typing import Self, cast, TYPE_CHECKING
 from account.models.association import account_removed_permissions
 from account.models.model_base import BaseModel
 
-from utils.enums import AccountStatusEnum, GenderEnum
+from utils.enums.enums import AccountStatusEnum, GenderEnum
 from utils.database.column_types import EmailType, GenderType, PasswordType
 from utils.utils import get_current_time
 

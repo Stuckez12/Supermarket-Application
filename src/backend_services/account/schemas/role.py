@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from utils.enums import AccountRoleEnum
+from utils.enums.enums import AccountRoleEnum
 
 
 class RoleMappingSchema(BaseModel):

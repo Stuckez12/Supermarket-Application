@@ -3,7 +3,7 @@ from utils.proto.account.account_enums_pb2 import (
 )
 from utils.proto.account.common_enums_pb2 import GenderEnum as GRPCGenderEnum
 
-from utils.enums import (
+from utils.enums.enums import (
     AccountStatusEnum as PythonAccountStatusEnum,
     GenderEnum as PythonGenderEnum,
 )

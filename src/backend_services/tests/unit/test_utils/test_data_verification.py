@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Any, Type
 
 from utils.data_verification import DataVerification
-from utils.enums import TriBool
+from utils.enums.enums import TriBool
 from utils.schemas import DateTimeConfig, NumberConfig, StringConfig
 
 

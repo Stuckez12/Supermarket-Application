@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Type, Union
 
-from utils.enums import TriBool
+from utils.enums.enums import TriBool
 
 
 class StringConfig(BaseModel):

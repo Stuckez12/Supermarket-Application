@@ -5,7 +5,8 @@
 linting:
 	uv run black . --check
 	uv run mypy .
-	uv run flake8 .
+	uv run flake8 . --select=E225,E231,E302,E305,F403,F404,F405,F821,F822,F823,F824 --exclude=".venv,*/__init__.py"
+	uv run flake8 . --select=F403,F405 --filename="*/__init__.py" --exclude ".venv"
 
 
 ################################################################### 

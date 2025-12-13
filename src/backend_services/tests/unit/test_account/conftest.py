@@ -13,7 +13,7 @@ from account.services import AuthService
 
 from utils.app_initialise import Initialise
 from utils.database import get_db, db_connection, get_database_url
-from utils.enums import AccountRoleEnum, AccountStatusEnum, GenderEnum
+from utils.enums.enums import AccountRoleEnum, AccountStatusEnum, GenderEnum
 from utils.schemas import DatabaseSettings
 
 

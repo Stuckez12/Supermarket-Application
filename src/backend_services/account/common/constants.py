@@ -1,7 +1,7 @@
 from account.common.enums import InteractionType, OperationTags, OperationType
 from account.schemas import PermissionCreateSchema, RoleMappingSchema
 
-from utils.enums import AccountRoleEnum
+from utils.enums.enums import AccountRoleEnum
 
 
 ACCOUNT_SERVICE_VERSION = "0.0.1"

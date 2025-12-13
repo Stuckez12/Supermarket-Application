@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
 
       - name: Install Black
         run: pip install black
@@ -48,7 +48,8 @@ jobs:
       # Extra linter check targeting specific issues not covered by base linter
       - name: Run flake8
         run: |
-          uv run flake8 src/
+          uv run flake8 --select=E225,E231,E302,E305,F403,F404,F405,F821,F822,F823,F824 --exclude ".venv,*/__init__.py"
+          uv run flake8 --select=F403,F405 --filename="*/__init__.py" --exclude ".venv"
 
   tests:
     needs: linting-check

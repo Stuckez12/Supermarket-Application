@@ -33,11 +33,12 @@ services:
     build:
       context: .
       dockerfile: src/backend_services/gateway/Dockerfile
-    container_name: gateway
+    container_name: ${API_SERVICE_NAME}
     ports:
       - ${API_SERVICE_PORT}:${API_SERVICE_PORT}
     networks:
       - pg-network
+      - grpc-network
     volumes:
       - ./src/backend_services/gateway:/api/gateway
     command: uvicorn gateway:app --host 0.0.0.0 --port 8000
@@ -46,11 +47,12 @@ services:
     build:
       context: .
       dockerfile: src/backend_services/account/Dockerfile
-    container_name: account
+    container_name: ${ACCOUNT_SERVICE_NAME}
     ports:
       - ${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}
     networks:
       - pg-network
+      - grpc-network
     volumes:
       - ./src/backend_services/account:/api/account
     command: python -m account.server
@@ -58,6 +60,8 @@ services:
 
 networks:
   pg-network:
+  grpc-network:
+    driver: bridge
 
 
 volumes:
