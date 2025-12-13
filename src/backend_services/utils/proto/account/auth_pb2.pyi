@@ -1,6 +1,6 @@
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
-from account.proto import account_enums_pb2 as _account_enums_pb2
-from account.proto import common_enums_pb2 as _common_enums_pb2
+from utils.proto.account import account_enums_pb2 as _account_enums_pb2
+from utils.proto.account import common_enums_pb2 as _common_enums_pb2
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from typing import (

@@ -4,7 +4,7 @@ import logging
 from concurrent import futures
 
 from account.common.utils.seed_db import seed_db
-from account.proto import auth_pb2_grpc
+from utils.proto.account import auth_pb2_grpc
 from account.routes import AccountAuthService
 from account.settings import settings
 

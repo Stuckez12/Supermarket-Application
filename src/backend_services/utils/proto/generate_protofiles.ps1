@@ -1,13 +1,13 @@
 Write-Output "Generating python proto files"
 
-$dir = "src/backend_services/"
+$dir = "src/backend_services/utils"
 
 # Add all service folders here to generate proto files
 $services = @("account")
 
 foreach ($service in $services) {
-    $rpc_dir = $dir + $service + "/rpc"
-    $proto_dir = $dir + $service + "/proto"
+    $rpc_dir = $dir + "/rpc/" + $service
+    $proto_dir = $dir + "/proto/" + $service
 
     Get-ChildItem -Path $rpc_dir -Filter *.proto | ForEach-Object {
         $protoFile = $_.Name
@@ -20,4 +20,4 @@ foreach ($service in $services) {
 }
 
 Write-Output "Execution policy now restricted"
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
+# Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted

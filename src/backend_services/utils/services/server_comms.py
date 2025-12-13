@@ -4,12 +4,13 @@ import time
 
 from google.protobuf.message import Message
 from grpc import RpcError, StatusCode
-from typing import Any, Callable, TypeVar, Union
+from typing import Callable, TypeVar
 
 from utils.constants import GRPC_CHANNEL_OPTIONS
 
 
-STUBS = TypeVar("gRPC Stubs")
+REQUESTS = TypeVar("REQUESTS")
+STUBS = TypeVar("STUBS")
 
 
 class ServerCommunication:
@@ -18,7 +19,7 @@ class ServerCommunication:
         channel_host: str,
         channel_port: int,
         channel_secure: bool = False,
-        server_certificate: str = None,
+        server_certificate: str | None = None,
         rpc_max_retries: int = 3,
         channel_options: list = GRPC_CHANNEL_OPTIONS,
     ) -> None:
@@ -53,32 +54,27 @@ class ServerCommunication:
 
         if self.secure_channel:
             self.channel = grpc.secure_channel(
-                url, self.certificate, options=self.options
+                url, self.certificate, options=self.options  # type: ignore[arg-type]
             )
 
         else:
             self.channel = grpc.insecure_channel(url, options=self.options)
 
-    def _retry(self, attempt_count: int):
+    def _retry(self, attempt_count: int) -> None:
         time.sleep(2**attempt_count)
 
     def oto_request(
         self,
-        request: Union[str, Callable],
+        request: str,
         stub: Callable[[], STUBS],
         data: Message,
-    ) -> Any:
+    ) -> Message:
         for attempt in range(self.max_retries):
             try:
-                stub_channel = stub(self.channel)
+                stub_channel = stub(self.channel)  # type: ignore[call-arg]
+                func = getattr(stub_channel, request)
 
-                if isinstance(request, str):
-                    call_func = getattr(stub_channel, request)
-
-                else:
-                    call_func = request
-
-                return call_func(data)
+                return func(data)
 
             except RpcError as err:
                 status = err.code()

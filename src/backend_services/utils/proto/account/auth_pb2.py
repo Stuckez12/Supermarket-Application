@@ -19,8 +19,8 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
-from account.proto import account_enums_pb2 as account__enums__pb2
-from account.proto import common_enums_pb2 as common__enums__pb2
+from utils.proto.account import account_enums_pb2 as account__enums__pb2
+from utils.proto.account import common_enums_pb2 as common__enums__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(

@@ -1,5 +1,7 @@
-from account.proto.account_enums_pb2 import AccountStatusEnum as GRPCAccountStatusEnum
-from account.proto.common_enums_pb2 import GenderEnum as GRPCGenderEnum
+from utils.proto.account.account_enums_pb2 import (
+    AccountStatusEnum as GRPCAccountStatusEnum,
+)
+from utils.proto.account.common_enums_pb2 import GenderEnum as GRPCGenderEnum
 
 from utils.enums import (
     AccountStatusEnum as PythonAccountStatusEnum,
