@@ -29,6 +29,19 @@ services:
       - pg-network
     attach: false
 
+  gateway:
+    build:
+      context: .
+      dockerfile: src/backend_services/gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - ${API_SERVICE_PORT}:${API_SERVICE_PORT}
+    networks:
+      - pg-network
+    volumes:
+      - ./src/backend_services/gateway:/api/gateway
+    command: uvicorn gateway:app --host 0.0.0.0 --port 8000
+
   account:
     build:
       context: .

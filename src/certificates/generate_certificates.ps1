@@ -6,7 +6,7 @@ $certificate_directory = "./src/certificates"
 $config_directory = "./openssl.cnf"
 
 # Add all service folders here to generate proto files
-$services  = @("account")
+$services  = @("account", "gateway")
 
 $certificate_folder = $certificate_directory + "/certificate"
 $pkey_folder = $certificate_directory + "/private_key"
@@ -25,4 +25,4 @@ Write-Output "Generation completed"
 # Automatically reset execution policy to restricted incase user forgets to do so
 # This means the user must manually set execution to be allowed but only for one file (if executed)
 Write-Output "Execution policy now restricted"
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
+# Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Restricted
